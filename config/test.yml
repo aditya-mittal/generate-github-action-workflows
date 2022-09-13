@@ -1,0 +1,5 @@
+gl2gh:
+  github:
+    url: mock.api.github.com
+    username: aditya-mittal
+    token: some_private_token

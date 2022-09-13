@@ -1,0 +1,5 @@
+gl2gh:
+  github:
+    url: api.github.com
+    username: your_github_username
+    token: your_github_token

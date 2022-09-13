@@ -1,0 +1,8 @@
+.idea
+node_modules
+test_report.xml
+config/default.yml
+*.iml
+**.DS_Store
+.nyc_output
+coverage
