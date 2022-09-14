@@ -32,8 +32,8 @@ describe('End2EndTest', function() {
 		setTimeout(()=>{},50000);
 		//replace app parameters
 		replace({
-			regex: 'test',
-			replacement: 'bar',
+			regex: 'APPLICATION_NAME',
+			replacement: 'some-repo',
 			paths: [pathToDestinationFile],
 			recursive: false
 		});
