@@ -1,7 +1,6 @@
 const git = require('isomorphic-git');
 const http = require('isomorphic-git/http/node');
 const fs = require('fs');
-const path = require('path');
 
 function GitClient(githubUserName, githubUserEmail, githubToken) {
 	this.githubUserName = githubUserName;

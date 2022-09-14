@@ -9,6 +9,8 @@ const config = require('config');
 
 const GithubClient = require('../../../src/github/client.js');
 const Repository = require('../../../src/github/model/repository.js');
+const repoDetails = require('../../resources/github/repoDetails.json');
+const repoList = require('../../resources/github/repoList.json');
 
 describe('Github client', function() {
 	const GITHUB_API_URL = config.get('gl2gh.github.url');
@@ -29,5 +31,51 @@ describe('Github client', function() {
 	});
 	afterEach(() => {
 		nock.cleanAll();
+	});
+
+	describe('#getRepo', function() {
+		it('should get the repo based on name provided', async () => {
+			//given
+			const owner = 'foo-user';
+			const repoName = 'some-repo';
+			api.get(`/repos/${owner}/${repoName}`).reply(201, repoDetails);
+			//when
+			const repository = await githubClient.getRepo(owner, repoName);
+			//then
+			repository.name.should.equal(repoName);
+			repository.clone_url.should.equal('https://github.com/foo-user/some-repo.git');
+		});
+		it('should throw error when github returns 404 on get repo', async () => {
+			//given
+			const owner = 'foo-user';
+			const repoName = 'some-repo';
+			api.get(`/repos/${owner}/${repoName}`).reply(404);
+			//when
+			return assert.isRejected(
+				githubClient.getRepo(owner, repoName),
+				Error,
+				`Unable to get repo with name ${repoName}`
+			);
+		});
+	});
+	describe('#listOrgRepos', function() {
+		it('should get the repo based on name provided', async () => {
+			//given
+			const orgName = 'some-org';
+			api.get(`/orgs/${orgName}/repos`).reply(200, repoList);
+			//when
+			const repositoryList = await githubClient.listOrgRepos(orgName);
+			//then
+			repositoryList.should.be.an('array');
+			repositoryList.should.have.lengthOf(2);
+			repositoryList[0].should.be.a('object');
+			repositoryList[0].should.be.instanceof(Repository);
+			repositoryList[0].should.have.all.keys('name', 'owner_name', 'clone_url');
+			repositoryList[0].name.should.equal('Hello-World');
+			repositoryList[0].owner_name.should.equal('octocat');
+			repositoryList[1].should.have.all.keys('name', 'owner_name', 'clone_url');
+			repositoryList[1].name.should.equal('Hey-World');
+			repositoryList[1].owner_name.should.equal('octocat');
+		});
 	});
 });

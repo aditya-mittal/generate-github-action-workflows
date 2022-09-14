@@ -8,7 +8,6 @@ const should = require('chai').should();
 const sinon = require('sinon');
 const path = require('path');
 const fs = require('fs');
-const config = require('config');
 
 const FsClient = require('../../src/fsClient.js');
 
@@ -84,5 +83,5 @@ describe('FsClient', function() {
 			);
 			sinon.assert.calledWith(copyFileStub, pathToSourceFile, pathToDestinationFile, copyMode);
 		});
-	})
+	});
 });

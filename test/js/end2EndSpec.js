@@ -1,6 +1,7 @@
 const path = require('path');
 const fs = require('fs');
 const config = require('config');
+const replace = require('replace');
 
 const FsClient = require('../../src/fsClient.js');
 const GitClient = require('../../src/gitClient.js');
@@ -29,12 +30,19 @@ describe('End2EndTest', function() {
 		const copyMode = fs.constants.COPYFILE_EXCL;
 		await fsClient.copyFile(pathToSourceFile, pathToDestinationFile, copyMode);
 		setTimeout(()=>{},50000);
+		//replace app parameters
+		replace({
+			regex: 'test',
+			replacement: 'bar',
+			paths: [pathToDestinationFile],
+			recursive: false
+		});
 		// stage a file
 		const filepath = path.join('.github', 'workflows', 'callerWorkflow.yml');
 		await gitClient.add(pathToCloneRepo, filepath);
 		setTimeout(()=>{},50000);
 		//commit a file
-		const commitMessage = 'My first programmatic commit'
+		const commitMessage = 'My first programmatic commit';
 		//when
 		await gitClient.commit(pathToCloneRepo, commitMessage);
 		setTimeout(()=>{},5000);
