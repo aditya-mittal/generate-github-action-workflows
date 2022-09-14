@@ -15,7 +15,7 @@ const config = require('config');
 const GitClient = require('../../src/gitClient.js');
 
 describe('Git', function() {
-	const gitClient = new GitClient(config.get('gl2gh.github.token'));
+	const gitClient = new GitClient(config.get('gl2gh.github.username'), config.get('gl2gh.github.email'), config.get('gl2gh.github.token'));
 	describe('Clone', function() {
 		let cloneStub;
 		before(() => {
@@ -57,6 +57,50 @@ describe('Git', function() {
 				onAuth: sinon.match.func, onAuthFailure: sinon.match.func });
 		});
 	});
+	describe('Add', function() {
+		let addStub;
+		before(() => {
+			addStub = sinon.stub(git, 'add');
+		});
+		after(() => {
+			addStub.restore();
+		});
+		it('should add(stage) the file', async function() {
+			//given
+			const repoName = 'some-repo';
+			const repoPathOnLocal = path.join(process.cwd(), repoName);
+			const fileName = 'test.txt'
+			const relativeFilePathInRepo = path.join('.github', 'workflows', fileName);
+			addStub.withArgs({fs, repoPathOnLocal, relativeFilePathInRepo}).returns(Promise.resolve());
+			//when
+			await gitClient.add(repoPathOnLocal, relativeFilePathInRepo);
+			//then
+			sinon.assert.calledWith(addStub, {fs, dir: repoPathOnLocal, filepath: relativeFilePathInRepo});
+			expect(addStub.called).to.equal(true);
+		});
+	})
+	describe('Commit', function() {
+  		let commitStub;
+  		before(() => {
+  			commitStub = sinon.stub(git, 'commit');
+  		});
+  		after(() => {
+  			commitStub.restore();
+  		});
+  		it('should commit the staged files', async function() {
+  			//given
+  			const repoName = 'some-repo';
+				const repoPathOnLocal = path.join(process.cwd(), '/tmp', repoName);
+  			const commitMessage = 'My first programmatic commit'
+
+  			commitStub.withArgs({fs, dir: repoPathOnLocal, message: commitMessage, author: {name: config.get('gl2gh.github.username'), email: config.get('gl2gh.github.email')}}).returns(Promise.resolve());
+  			//when
+  			await gitClient.commit(repoPathOnLocal, commitMessage);
+  			//then
+  			sinon.assert.calledWith(commitStub, {fs, dir: repoPathOnLocal, message: commitMessage, author: {name: config.get('gl2gh.github.username'), email: config.get('gl2gh.github.email')}});
+  			expect(commitStub.called).to.equal(true);
+  		});
+  	})
 	describe('#push()', function() {
 		let pushStub;
 		before(() => {
@@ -98,4 +142,5 @@ describe('Git', function() {
 				onAuth: sinon.match.func, onAuthFailure: sinon.match.func});
 		});
 	});
+
 });

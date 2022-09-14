@@ -2,4 +2,5 @@ gl2gh:
   github:
     url: api.github.com
     username: your_github_username
+    email: your_email@gmail.com
     token: your_github_token
