@@ -59,29 +59,27 @@ describe('FsClient', function() {
 			//given
 			const pathToSourceFile = 'test/resources/sampleCallerWorkflowActions.yml';
 			const pathToDestinationFile = path.join(process.cwd(), 'callerWorkflow.yml');
-			const copyMode = fs.constants.COPYFILE_EXCL;
 
-			copyFileStub.withArgs(pathToSourceFile, pathToDestinationFile, copyMode).returns(Promise.resolve());
+			copyFileStub.withArgs(pathToSourceFile, pathToDestinationFile).returns(Promise.resolve());
 			//when
-			await fsClient.copyFile(pathToSourceFile, pathToDestinationFile, copyMode);
+			await fsClient.copyFile(pathToSourceFile, pathToDestinationFile);
 			//then
-			sinon.assert.calledWith(copyFileStub, pathToSourceFile, pathToDestinationFile, copyMode);
+			sinon.assert.calledWith(copyFileStub, pathToSourceFile, pathToDestinationFile);
 			expect(copyFileStub.called).to.equal(true);
 		});
 		it('should handle error when copying the file', async function() {
 			//given
 			const pathToSourceFile = 'test/resources/sampleCallerWorkflowActions.yml';
 			const pathToDestinationFile = path.join(process.cwd(), '/tmp','.github', 'workflows', 'callerWorkflow.yml');
-			const copyMode = fs.constants.COPYFILE_EXCL;
 			const errorMessage = 'Error occurred while creating the directory';
-			copyFileStub.withArgs(pathToSourceFile, pathToDestinationFile, copyMode).returns(Promise.reject(new Error(errorMessage)));
+			copyFileStub.withArgs(pathToSourceFile, pathToDestinationFile).returns(Promise.reject(new Error(errorMessage)));
 			//when & then
 			assert.isRejected(
-				fsClient.copyFile(pathToSourceFile, pathToDestinationFile, copyMode),
+				fsClient.copyFile(pathToSourceFile, pathToDestinationFile),
 				Error,
 				errorMessage
 			);
-			sinon.assert.calledWith(copyFileStub, pathToSourceFile, pathToDestinationFile, copyMode);
+			sinon.assert.calledWith(copyFileStub, pathToSourceFile, pathToDestinationFile);
 		});
 	});
 });

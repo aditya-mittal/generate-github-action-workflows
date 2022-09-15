@@ -12,7 +12,8 @@ function FsClient() {
 		);
 	};
 
-	this.copyFile = function(src, dest, mode) {
+	this.copyFile = function(src, dest) {
+		let mode = fs.constants.COPYFILE_EXCL;
 		return fs.copyFile(src, dest, mode, (err) => {
 			if (err) {
 				throw err;
