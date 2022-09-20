@@ -1,6 +1,6 @@
 const path = require('path');
 const config = require('config');
-const replace = require('replace');
+const replace = require('replace-in-file');
 
 const GithubClient = require('./github/client.js');
 const GitClient = require('./gitClient.js');
@@ -43,12 +43,12 @@ function WorkflowCreator() {
 	};
 
 	var _replaceRepoSpecificParameters = function(repo, pathToRepoWorkflow) {
-		return replace({
-			regex: 'APPLICATION_NAME',
-			replacement: repo.name,
-			paths: [pathToRepoWorkflow],
-			recursive: false
-		});
+		const options = {
+			files: pathToRepoWorkflow,
+			from: /APPLICATION_NAME/g,
+			to: repo.name
+		};
+		return replace(options);
 	};
 
 	var _createWorkflow = async function(repo) {

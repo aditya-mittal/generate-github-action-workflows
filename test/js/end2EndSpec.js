@@ -1,7 +1,6 @@
 const path = require('path');
 const config = require('config');
-const replace = require('replace');
-
+const replace = require('replace-in-file');
 const FsClient = require('../../src/fsClient.js');
 const GitClient = require('../../src/gitClient.js');
 
@@ -29,12 +28,12 @@ describe('End2EndTest', function() {
 		await fsClient.copyFile(pathToSourceFile, pathToDestinationFile);
 		setTimeout(()=>{},50000);
 		//replace app parameters
-		replace({
-			regex: 'APPLICATION_NAME',
-			replacement: 'some-repo',
-			paths: [pathToDestinationFile],
-			recursive: false
-		});
+		const options = {
+			files: pathToDestinationFile,
+			from: [/APPLICATION_NAME/g, /ubuntu/g],
+			to: ['some-repo', 'linux']
+		};
+		await replace(options);
 		// stage a file
 		const filepath = path.join('.github', 'workflows', 'callerWorkflow.yml');
 		await gitClient.add(pathToCloneRepo, filepath);

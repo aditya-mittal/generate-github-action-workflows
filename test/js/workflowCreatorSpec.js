@@ -13,7 +13,7 @@ const replaceStub = function() {
 	Promise.resolve();
 };
 
-const WorkflowCreator = proxyquire('../../src/workflowCreator.js', {'replace': replaceStub});
+const WorkflowCreator = proxyquire('../../src/workflowCreator.js', {'replace-in-file': replaceStub});
 
 const repoList = require('../resources/github/repoList.json');
 
