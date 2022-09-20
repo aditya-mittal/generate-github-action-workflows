@@ -29,8 +29,8 @@ function WorkflowCreator() {
 			.catch((err) => console.error(err.message));
 	};
 
-	var _getPathToWorkflowDir = function(repoName) {
-		return path.join(process.cwd(), '/tmp','create', repoName, '.github', 'workflows');
+	var _getPathToWorkflowDir = function(pathToCloneRepo) {
+		return path.join(pathToCloneRepo, '.github', 'workflows');
 	};
 
 	var _getPathToTemplateWorkflowFile = function(workflowType) {
@@ -39,7 +39,7 @@ function WorkflowCreator() {
 	};
 
 	var _getPathToRepoWorkflow = function(pathToWorkflowDir) {
-		path.join(pathToWorkflowDir, 'callerWorkflow.yml');
+		return path.join(pathToWorkflowDir, 'callerWorkflow.yml');
 	};
 
 	var _replaceRepoSpecificParameters = function(repo, pathToRepoWorkflow) {
@@ -51,18 +51,24 @@ function WorkflowCreator() {
 		});
 	};
 
-	var _createWorkflow = function(repo) {
+	var _createWorkflow = async function(repo) {
 		const workflowType = '';
-		const pathToCloneRepo = path.join(process.cwd(), '/tmp','create', repo.name);
-		const pathToWorkflowDir = _getPathToWorkflowDir(repo.name);
+		const pathToCloneRepo = path.join(process.cwd(), '/tmp', repo.name);
+		const pathToWorkflowDir = _getPathToWorkflowDir(pathToCloneRepo);
 		const pathToRepoWorkflow = _getPathToRepoWorkflow(pathToWorkflowDir);
 		const repoRelativePathToWorkflow = path.join('.github','workflows', 'callerWorkflow.yml');
 		const commitWorkflowMessage = 'Commit github workflow while migrating from Jenkins';
 		const branchName = 'master';
 		const remoteName = 'origin';
 		return gitClient.clone(repo.clone_url, pathToCloneRepo, remoteName)
-			.then(() => fsClient.mkdir(pathToWorkflowDir))
-			.then(() => fsClient.copyFile(_getPathToTemplateWorkflowFile(workflowType), pathToRepoWorkflow))
+			.then(async function() {
+				return await new Promise(function(resolve) {
+					resolve(fsClient.mkdir(pathToWorkflowDir));
+				});
+			})
+			.then(async function() {
+				await fsClient.copyFile(_getPathToTemplateWorkflowFile(workflowType), pathToRepoWorkflow);
+			})
 			.then(() => _replaceRepoSpecificParameters(repo, pathToRepoWorkflow))
 			.then(() => gitClient.add(pathToCloneRepo, repoRelativePathToWorkflow))
 			.then(() => gitClient.commit(pathToCloneRepo, commitWorkflowMessage))

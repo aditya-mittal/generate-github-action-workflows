@@ -34,7 +34,7 @@ describe('Workflow creator', function() {
 		gitAddStub = sinon.stub(git, 'add');
 		gitCommitStub = sinon.stub(git, 'commit');
 		gitPushStub = sinon.stub(git, 'push');
-		fsMkDirStub = sinon.stub(fs, 'mkdir');
+		fsMkDirStub = sinon.stub(fs, 'mkdirSync');
 		fsCopyFileStub = sinon.stub(fs, 'copyFile');
 		githubApi = nock(
 			'https://' + GITHUB_API_URL, {
@@ -50,8 +50,9 @@ describe('Workflow creator', function() {
 		nock.cleanAll();
 	});
 
-	it.only('should generate workflows for all repos under the specified github org', async () =>  {
+	it('should generate workflows for all repos under the specified github org', async function() {
 		//given
+		this.timeout(0);
 		const githubOrgName = 'test-migration-org-1-gh';
 		githubApi.get(`/orgs/${githubOrgName}/repos`).reply(200, repoList);
 		gitCloneStub.returns(Promise.resolve());
@@ -70,5 +71,19 @@ describe('Workflow creator', function() {
 		sinon.assert.callCount(gitAddStub, 2);
 		sinon.assert.callCount(gitCommitStub, 2);
 		sinon.assert.callCount(gitPushStub, 2);
+	});
+});
+describe('Workflow creator - end2end', function() {
+	const workflowCreator = new WorkflowCreator();
+
+	it.skip('should generate workflows for all repos under the specified github org', async function(done) {
+		//given
+		this.timeout(20000);
+		const githubOrgName = 'test-migration-org-1-gh';
+		//when
+		const result = await workflowCreator.createWorkflows(githubOrgName);
+		//then
+		expect(result).to.equal(0);
+		done;
 	});
 });

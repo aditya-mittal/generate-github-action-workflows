@@ -1,5 +1,4 @@
 const path = require('path');
-const fs = require('fs');
 const config = require('config');
 const replace = require('replace');
 
@@ -27,8 +26,7 @@ describe('End2EndTest', function() {
 		// copy workflow actions file
 		const pathToSourceFile = 'test/resources/sampleCallerWorkflowActions.yml';
 		const pathToDestinationFile = path.join(process.cwd(), '/tmp','some-repo', '.github', 'workflows', 'callerWorkflow.yml');
-		const copyMode = fs.constants.COPYFILE_EXCL;
-		await fsClient.copyFile(pathToSourceFile, pathToDestinationFile, copyMode);
+		await fsClient.copyFile(pathToSourceFile, pathToDestinationFile);
 		setTimeout(()=>{},50000);
 		//replace app parameters
 		replace({

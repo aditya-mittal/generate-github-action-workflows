@@ -38,11 +38,11 @@ describe('Github client', function() {
 			//given
 			const owner = 'foo-user';
 			const repoName = 'some-repo';
-			api.get(`/repos/${owner}/${repoName}`).reply(201, repoDetails);
+			api.get(`/repos/${owner}/${repoName}`).reply(200, repoDetails);
 			//when
 			const repository = await githubClient.getRepo(owner, repoName);
 			//then
-			repository.name.should.equal(repoName);
+			repository.name.should.equal('some-repo');
 			repository.clone_url.should.equal('https://github.com/foo-user/some-repo.git');
 		});
 		it('should throw error when github returns 404 on get repo', async () => {
