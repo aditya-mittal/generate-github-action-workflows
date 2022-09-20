@@ -1,0 +1,43 @@
+name: APPLICATION_NAME-build-workflow
+
+on:
+  workflow_dispatch:
+    inputs:
+      Branch:
+        description: "Branch to Build"
+        required: true
+        default: "$default-branch"
+
+jobs:
+  call-wf:
+    uses: ORG/REPO/.github/workflows/YOUR_WORKFLOW_FILE@master
+    with:
+      branch: master
+      octopus_secret_keys: "octopus-api-key,octopus-url,docker-user,docker-password,github-pat"
+      build_secret_keys: "helm-user,helm-password,docker-user,docker-password,github-pat,prismacloud-password,prismacloud-url,prismacloud-username"
+      github_pat_name: github-pat
+      docker_registry: DOCKER_REGISTRY
+      docker_image: APPLICATION_NAME
+      veracode_app_name: APPLICATION_NAME
+      service_name: APPLICATION_NAME
+      java_version: '11'
+      helm_repo_url: HELM_REPO_URL
+      helm_push_plugin_version: 1.0.1
+      helm_chart_name: APPLICATION_NAME
+      helm_chart_dir: APPLICATION_NAME
+      helm_version: v3.4.0
+      octopus_client_version: '2'
+      octopus_client_image: OCTOPUS_DOCKER_IMAGE
+      octopus_space: OCTOPUS_SPACE
+      octopus_project_group: OCTOPUS_PROJECT_GROUP
+      octopus_project:  APPLICATION_NAME
+      octopus_lifecycle: OCTOPUS_LIFECYCLE
+      octopus_prerelease_lifecycle: OCTOPUS_LIFECYCLE
+      octopus_release_lifecycle: OCTOPUS_LIFECYCLE
+      octopus_deployment_package: Deploy Helm Upgrade/ValuesPack-1
+      octopus_worker_pool: Default Worker Pool
+      kong_step_name: KONG_STEP_NAME
+      octopus_helm_template: HELM_TEMPLATE
+    secrets:
+      azure_secret: ${{ secrets.AKV_SECRET }}
+      vault_name: AKV_VALUT_NAME

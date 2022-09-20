@@ -73,17 +73,3 @@ describe('Workflow creator', function() {
 		sinon.assert.callCount(gitPushStub, 2);
 	});
 });
-describe('Workflow creator - end2end', function() {
-	const workflowCreator = new WorkflowCreator();
-
-	it.skip('should generate workflows for all repos under the specified github org', async function(done) {
-		//given
-		this.timeout(20000);
-		const githubOrgName = 'test-migration-org-1-gh';
-		//when
-		const result = await workflowCreator.createWorkflows(githubOrgName);
-		//then
-		expect(result).to.equal(0);
-		done;
-	});
-});

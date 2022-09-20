@@ -1,8 +1,12 @@
+const chai = require('chai');
+const expect = chai.expect;
+
 const path = require('path');
 const config = require('config');
 const replace = require('replace-in-file');
 const FsClient = require('../../src/fsClient.js');
 const GitClient = require('../../src/gitClient.js');
+const WorkflowCreator = require('../../src/workflowCreator.js');
 
 describe('End2EndTest', function() {
 	const gitClient = new GitClient(config.get('gl2gh.github.username'), config.get('gl2gh.github.email'), config.get('gl2gh.github.token'));
@@ -23,15 +27,28 @@ describe('End2EndTest', function() {
 		setTimeout(()=>{}, 50000);
 
 		// copy workflow actions file
-		const pathToSourceFile = 'test/resources/sampleCallerWorkflowActions.yml';
+		const pathToSourceFile = 'test/resources/caller-java-gradle-workflow.yml';
 		const pathToDestinationFile = path.join(process.cwd(), '/tmp','some-repo', '.github', 'workflows', 'callerWorkflow.yml');
 		await fsClient.copyFile(pathToSourceFile, pathToDestinationFile);
 		setTimeout(()=>{},50000);
 		//replace app parameters
 		const options = {
 			files: pathToDestinationFile,
-			from: [/APPLICATION_NAME/g, /ubuntu/g],
-			to: ['some-repo', 'linux']
+			from: [
+				/APPLICATION_NAME/g,
+				/YOUR_WORKFLOW_FILE/g,
+				/DOCKER_REGISTRY/g,
+				/HELM_REPO_URL/g,
+				/OCTOPUS_DOCKER_IMAGE/g
+			],
+			to: [
+				'some-repo',
+				'java-gradle-wf.yml',
+				'https://mydocker.io/docker-registry',
+				'https://myhelmregistry.io',
+				'my_octopus_image'
+
+			]
 		};
 		await replace(options);
 		// stage a file
@@ -46,5 +63,17 @@ describe('End2EndTest', function() {
 		//push a file
 		const branchName = 'master';
 		await gitClient.push(pathToCloneRepo, remoteName, branchName);
+	});
+
+	it.skip('should generate workflows for all repos under the specified github org', async function(done) {
+		//given
+		this.timeout(20000);
+		const workflowCreator = new WorkflowCreator();
+		const githubOrgName = 'test-migration-org-1-gh';
+		//when
+		const result = await workflowCreator.createWorkflows(githubOrgName);
+		//then
+		expect(result).to.equal(0);
+		done;
 	});
 });
