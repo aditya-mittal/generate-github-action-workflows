@@ -16,10 +16,10 @@ Generate github action workflows for one or more GitHub repository.
 ```bash
 # Example current versions, also known to work with earlier versions
 $ node --version
-v15.7.0
+v18.4.0
 
 $ npm --version
-7.4.3
+8.19.1
 ```
 
 ### Installation
