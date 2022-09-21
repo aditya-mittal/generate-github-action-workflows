@@ -1,6 +1,9 @@
-ggaw:
+j2ga:
   github:
     url: api.github.com
     username: your_github_username
     email: your_email@gmail.com
     token: your_github_token
+  jenkins2githubWorkflowsMap:
+    Type1JenkinsSharedLibrary: java-gradle-workflow
+    Type2JenkinsSharedLibrary: java-maven-workflow

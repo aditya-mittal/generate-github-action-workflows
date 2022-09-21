@@ -1,10 +1,10 @@
 {
-  "name": "ggaw",
+  "name": "j2ga",
   "version": "1.0.0",
   "description": "Generate GitHub Action Workflows",
   "main": "cli.js",
   "bin": {
-    "ggaw": "./src/cli.js"
+    "j2ga": "./src/cli.js"
   },
   "scripts": {
     "start": "node src/cli.js",
@@ -24,7 +24,7 @@
   "author": "aditya-mittal",
   "repository": {
     "type": "git",
-    "url": "git@github.com:aditya-mittal/generate-github-action-workflows.git"
+    "url": "git@github.com:aditya-mittal/j2ga.git"
   },
   "license": "ISC",
   "devDependencies": {

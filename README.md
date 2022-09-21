@@ -1,4 +1,4 @@
-# ggaw - Generate GitHub Action workflow(s)
+# j2ga - Generate GitHub Action workflow(s)
 
 Generate github action workflows for one or more GitHub repository. 
 - For developer instructions, see the [developer README](DEVELOP.md)
@@ -44,13 +44,13 @@ $ export NODE_CONFIG_ENV="your_config_file_name"
 ### Help
 
 ```bash
-$ ggaw -h
+$ j2ga -h
 ```
 
 ### Generate github action workflows for all repos under specified org
 
 ```bash
-$ ggaw create-workflows my-github-org
+$ j2ga create-workflows my-github-org
 ```
 
 ### Clean up

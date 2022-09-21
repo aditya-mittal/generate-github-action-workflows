@@ -13,9 +13,9 @@ const repoDetails = require('../../resources/github/repoDetails.json');
 const repoList = require('../../resources/github/repoList.json');
 
 describe('Github client', function() {
-	const GITHUB_API_URL = config.get('ggaw.github.url');
-	const GITHUB_PRIVATE_TOKEN = config.get('ggaw.github.token');
-	const GITHUB_USERNAME = config.get('ggaw.github.username');
+	const GITHUB_API_URL = config.get('j2ga.github.url');
+	const GITHUB_PRIVATE_TOKEN = config.get('j2ga.github.token');
+	const GITHUB_USERNAME = config.get('j2ga.github.username');
 	const githubClient = new GithubClient(GITHUB_API_URL, GITHUB_USERNAME, GITHUB_PRIVATE_TOKEN);
 	let api;
 	beforeEach(() => {

@@ -19,8 +19,8 @@ const repoList = require('../resources/github/repoList.json');
 
 describe('Workflow creator', function() {
 	const workflowCreator = new WorkflowCreator();
-	const GITHUB_API_URL = config.get('ggaw.github.url');
-	const GITHUB_PRIVATE_TOKEN = config.get('ggaw.github.token');
+	const GITHUB_API_URL = config.get('j2ga.github.url');
+	const GITHUB_PRIVATE_TOKEN = config.get('j2ga.github.token');
 
 	let githubApi;
 	let gitCloneStub;

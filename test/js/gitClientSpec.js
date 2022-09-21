@@ -15,7 +15,7 @@ const config = require('config');
 const GitClient = require('../../src/gitClient.js');
 
 describe('Git', function() {
-	const gitClient = new GitClient(config.get('ggaw.github.username'), config.get('ggaw.github.email'), config.get('ggaw.github.token'));
+	const gitClient = new GitClient(config.get('j2ga.github.username'), config.get('j2ga.github.email'), config.get('j2ga.github.token'));
 	describe('Clone', function() {
 		let cloneStub;
 		before(() => {
@@ -93,11 +93,11 @@ describe('Git', function() {
 			const repoPathOnLocal = path.join(process.cwd(), '/tmp', repoName);
 			const commitMessage = 'My first programmatic commit';
 
-			commitStub.withArgs({fs, dir: repoPathOnLocal, message: commitMessage, author: {name: config.get('ggaw.github.username'), email: config.get('ggaw.github.email')}}).returns(Promise.resolve());
+			commitStub.withArgs({fs, dir: repoPathOnLocal, message: commitMessage, author: {name: config.get('j2ga.github.username'), email: config.get('j2ga.github.email')}}).returns(Promise.resolve());
 			//when
 			await gitClient.commit(repoPathOnLocal, commitMessage);
 			//then
-			sinon.assert.calledWith(commitStub, {fs, dir: repoPathOnLocal, message: commitMessage, author: {name: config.get('ggaw.github.username'), email: config.get('ggaw.github.email')}});
+			sinon.assert.calledWith(commitStub, {fs, dir: repoPathOnLocal, message: commitMessage, author: {name: config.get('j2ga.github.username'), email: config.get('j2ga.github.email')}});
 			expect(commitStub.called).to.equal(true);
 		});
 	});
