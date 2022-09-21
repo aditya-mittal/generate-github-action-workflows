@@ -8,8 +8,8 @@ const FsClient = require('./fsClient.js');
 
 function WorkflowCreator() {
 	const fsClient = new FsClient();
-	const gitClient = new GitClient(config.get('gl2gh.github.username'), config.get('gl2gh.github.email'), config.get('gl2gh.github.token'));
-	const githubClient = new GithubClient(config.get('gl2gh.github.url'), config.get('gl2gh.github.username'), config.get('gl2gh.github.token'));
+	const gitClient = new GitClient(config.get('ggaw.github.username'), config.get('ggaw.github.email'), config.get('ggaw.github.token'));
+	const githubClient = new GithubClient(config.get('ggaw.github.url'), config.get('ggaw.github.username'), config.get('ggaw.github.token'));
 
 	this.createWorkflows = async function(githubOrgName) {
 		try {

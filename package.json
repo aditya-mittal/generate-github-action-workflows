@@ -24,7 +24,7 @@
   "author": "aditya-mittal",
   "repository": {
     "type": "git",
-    "url": "git@github.com:aditya-mittal/gl2gh.git"
+    "url": "git@github.com:aditya-mittal/generate-github-action-workflows.git"
   },
   "license": "ISC",
   "devDependencies": {

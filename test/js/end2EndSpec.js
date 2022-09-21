@@ -9,7 +9,7 @@ const GitClient = require('../../src/gitClient.js');
 const WorkflowCreator = require('../../src/workflowCreator.js');
 
 describe('End2EndTest', function() {
-	const gitClient = new GitClient(config.get('gl2gh.github.username'), config.get('gl2gh.github.email'), config.get('gl2gh.github.token'));
+	const gitClient = new GitClient(config.get('ggaw.github.username'), config.get('ggaw.github.email'), config.get('ggaw.github.token'));
 	const fsClient = new FsClient();
 	it.skip('should test E2E', async function() {
 		//clone

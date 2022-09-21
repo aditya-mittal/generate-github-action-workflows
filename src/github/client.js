@@ -45,7 +45,7 @@ function GithubClient(url, username, privateToken) {
 			method: method,
 			headers: {
 				'Content-Type': 'application/json',
-				'User-Agent': 'gl2gh',
+				'User-Agent': 'ggaw',
 				'Authorization': 'token ' + this.privateToken
 			}
 		};
