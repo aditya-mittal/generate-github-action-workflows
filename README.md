@@ -1,4 +1,4 @@
-# Generate GitHub Action workflow(s)
+# ggaw - Generate GitHub Action workflow(s)
 
 Generate github action workflows for one or more GitHub repository. 
 - For developer instructions, see the [developer README](DEVELOP.md)
@@ -41,6 +41,18 @@ $ export NODE_CONFIG_DIR="path-to-directory-containing-config"
 $ export NODE_CONFIG_ENV="your_config_file_name"
 ```
 
+### Help
+
+```bash
+$ ggaw -h
+```
+
+### Generate github action workflows for all repos under specified org
+
+```bash
+$ ggaw create-workflows my-github-org
+```
+
 ### Clean up
 
 Clean up any installed binary for migration
@@ -53,6 +65,9 @@ $ npm run clean
 - Navigate to your [GitHub Personal access tokens](https://github.com/settings/tokens)
 - Click `Generate new token`
 - Enter some text for `Note` and choose scopes: 
-  - `admin:repo_hook` (to configure webhooks on repositories)
   - `repo` (to configure repositories)
+  - `workflow` (to configure github action workflows)
+  - `admin:org` (to configure/manage github orgs)
+  - `user` (to configure/manage user's data)
+- If you have SSO enabled, additionally you may need to authorize the token to be used for a specific org 
 - Copy the generated token
