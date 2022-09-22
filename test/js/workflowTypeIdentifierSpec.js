@@ -32,5 +32,17 @@ describe('WorkflowTypeIdentifier', function() {
 				errorMessage
 			);
 		});
+		it('throw error when there is no Jenkinsfile', async () => {
+			//given
+			const pathToJenkinsFile = path.join(process.cwd(), 'test','resources', 'nonExistingFile');
+			const repoName = 'some-repo';
+			const errorMessage = `File ${pathToJenkinsFile} does not exist for repo ${repoName}`;
+			//when & then
+			assert.isRejected(
+				workflowTypeIdentifier.getWorkflowType(pathToJenkinsFile, repoName),
+				Error,
+				errorMessage
+			);
+		});
 	});
 });
