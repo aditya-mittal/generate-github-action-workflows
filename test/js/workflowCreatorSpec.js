@@ -54,7 +54,7 @@ describe('Workflow creator', function() {
 		nock.cleanAll();
 	});
 
-	it.only('should generate workflows for all repos under the specified github org', async function() {
+	it('should generate workflows for all repos under the specified github org', async function() {
 		//given
 		this.timeout(0);
 		const githubOrgName = 'test-migration-org-1-gh';

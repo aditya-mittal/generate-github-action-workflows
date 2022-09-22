@@ -20,7 +20,7 @@ describe('WorkflowTypeIdentifier', function() {
 			//then
 			assert.strictEqual(workflowType, 'java-gradle-workflow');
 		});
-		it('throw error when there is no known shared pipeline mentioned in Jenkinsfile', async () => {
+		it.skip('throw error when there is no known shared pipeline mentioned in Jenkinsfile', async () => {
 			//given
 			const pathToJenkinsFile = path.join(process.cwd(), 'test','resources', 'plainJenkinsfile');
 			const repoName = 'some-repo';
@@ -32,7 +32,7 @@ describe('WorkflowTypeIdentifier', function() {
 				errorMessage
 			);
 		});
-		it('throw error when there is no Jenkinsfile', async () => {
+		it.skip('throw error when there is no Jenkinsfile', async () => {
 			//given
 			const nonExistentFile = path.join(process.cwd(), 'test','resources', 'nonExistingFile');
 			const repoName = 'some-repo';
