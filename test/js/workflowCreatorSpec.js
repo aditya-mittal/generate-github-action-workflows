@@ -28,6 +28,8 @@ describe('Workflow creator', function() {
 	let gitCommitStub;
 	let gitPushStub;
 	let fsMkDirStub;
+	let fsExistsStub;
+	let fsReadFileStub;
 	let fsCopyFileStub;
 	beforeEach(() => {
 		gitCloneStub = sinon.stub(git, 'clone');
@@ -35,6 +37,8 @@ describe('Workflow creator', function() {
 		gitCommitStub = sinon.stub(git, 'commit');
 		gitPushStub = sinon.stub(git, 'push');
 		fsMkDirStub = sinon.stub(fs, 'mkdirSync');
+		fsExistsStub = sinon.stub(fs, 'existsSync');
+		fsReadFileStub = sinon.stub(fs.promises, 'readFile');
 		fsCopyFileStub = sinon.stub(fs, 'copyFile');
 		githubApi = nock(
 			'https://' + GITHUB_API_URL, {
@@ -50,13 +54,15 @@ describe('Workflow creator', function() {
 		nock.cleanAll();
 	});
 
-	it('should generate workflows for all repos under the specified github org', async function() {
+	it.only('should generate workflows for all repos under the specified github org', async function() {
 		//given
 		this.timeout(0);
 		const githubOrgName = 'test-migration-org-1-gh';
 		githubApi.get(`/orgs/${githubOrgName}/repos`).reply(200, repoList);
 		gitCloneStub.returns(Promise.resolve());
 		fsMkDirStub.returns(Promise.resolve());
+		fsExistsStub.returns(true);
+		fsReadFileStub.returns(Promise.resolve('Type1JenkinsSharedLibrary'));
 		fsCopyFileStub.returns(Promise.resolve());
 		gitAddStub.returns(Promise.resolve());
 		gitCommitStub.returns(Promise.resolve());
@@ -67,6 +73,8 @@ describe('Workflow creator', function() {
 		expect(result).to.equal(0);
 		sinon.assert.callCount(gitCloneStub, 2);
 		sinon.assert.callCount(fsMkDirStub, 2);
+		sinon.assert.callCount(fsExistsStub, 2);
+		sinon.assert.callCount(fsReadFileStub, 2);
 		sinon.assert.callCount(fsCopyFileStub, 2);
 		sinon.assert.callCount(gitAddStub, 2);
 		sinon.assert.callCount(gitCommitStub, 2);

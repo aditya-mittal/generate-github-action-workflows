@@ -5,11 +5,13 @@ const replace = require('replace-in-file');
 const GithubClient = require('./github/client.js');
 const GitClient = require('./gitClient.js');
 const FsClient = require('./fsClient.js');
+const WorkflowTypeIdentifier = require('./workflowTypeIdentifier.js');
 
 function WorkflowCreator() {
 	const fsClient = new FsClient();
 	const gitClient = new GitClient(config.get('j2ga.github.username'), config.get('j2ga.github.email'), config.get('j2ga.github.token'));
 	const githubClient = new GithubClient(config.get('j2ga.github.url'), config.get('j2ga.github.username'), config.get('j2ga.github.token'));
+	const workflowTypeIdentifier = new WorkflowTypeIdentifier(config.get('j2ga.jenkins2githubWorkflowsMap'));
 
 	this.createWorkflows = async function(githubOrgName) {
 		try {
@@ -42,6 +44,10 @@ function WorkflowCreator() {
 		return path.join(pathToWorkflowDir, 'callerWorkflow.yml');
 	};
 
+	var _getWorkflowType = function(pathToJenkinsFile, repoName) {
+		return workflowTypeIdentifier.getWorkflowType(pathToJenkinsFile, repoName);
+	};
+
 	var _replaceRepoSpecificParameters = function(repo, pathToRepoWorkflow) {
 		const options = {
 			files: pathToRepoWorkflow,
@@ -52,8 +58,8 @@ function WorkflowCreator() {
 	};
 
 	var _createWorkflow = async function(repo) {
-		const workflowType = '';
 		const pathToCloneRepo = path.join(process.cwd(), '/tmp', repo.name);
+		const pathToJenkinsFile = path.join(process.cwd(), '/tmp', repo.name, 'Jenkinsfile');
 		const pathToWorkflowDir = _getPathToWorkflowDir(pathToCloneRepo);
 		const pathToRepoWorkflow = _getPathToRepoWorkflow(pathToWorkflowDir);
 		const repoRelativePathToWorkflow = path.join('.github','workflows', 'callerWorkflow.yml');
@@ -66,7 +72,8 @@ function WorkflowCreator() {
 					resolve(fsClient.mkdir(pathToWorkflowDir));
 				});
 			})
-			.then(async function() {
+			.then(() => _getWorkflowType(pathToJenkinsFile, repo.name))
+			.then(async function(workflowType) {
 				await fsClient.copyFile(_getPathToTemplateWorkflowFile(workflowType), pathToRepoWorkflow);
 			})
 			.then(() => _replaceRepoSpecificParameters(repo, pathToRepoWorkflow))
