@@ -36,8 +36,7 @@ function WorkflowCreator() {
 	};
 
 	var _getPathToTemplateWorkflowFile = function(workflowType) {
-		console.log(workflowType);
-		return path.join(process.cwd(), 'src', 'resources', 'sampleCallerWorkflowActions.yml');
+		return path.join(process.cwd(), 'src', 'resources', `${workflowType}.yml`);
 	};
 
 	var _getPathToRepoWorkflow = function(pathToWorkflowDir) {

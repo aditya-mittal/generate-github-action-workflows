@@ -21,6 +21,7 @@ jobs:
       veracode_app_name: APPLICATION_NAME
       service_name: APPLICATION_NAME
       java_version: '11'
+      gradle_version: '8.0'
       helm_repo_url: HELM_REPO_URL
       helm_push_plugin_version: 1.0.1
       helm_chart_name: APPLICATION_NAME
