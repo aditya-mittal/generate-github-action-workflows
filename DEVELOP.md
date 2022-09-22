@@ -1,7 +1,7 @@
-# Migrate GitLab repo(s) to GitHub
+# j2ga - Migrate Jenkins pipeline(s) to GitHub Action workflow(s)
 
-Migrate all the projects within a specific group on Gitlab to repositories 
-under specific organisation on Github. 
+Migrating CI pipelines from Jenkins to Github Action Workflow(s) for one or more GitHub repository 
+under specified GitHub org.
 
 ### Install node dependencies
 ```bash

@@ -1,12 +1,12 @@
-# j2ga - Generate GitHub Action workflow(s)
+# j2ga - Migrate Jenkins pipeline(s) to GitHub Action workflow(s)
 
-Generate github action workflows for one or more GitHub repository. 
+Migrating CI pipelines from Jenkins to Github Action Workflow(s) for one or more GitHub repository. 
 - For developer instructions, see the [developer README](DEVELOP.md)
 
-### Schematic representation of generating Github Actions workflow 
+### Schematic representation 
 ![Schematic representation of generating Github Actions workflow](./schematicDiagram.png)
 
-### Sequence Diagram of generating Github Actions workflow
+### Sequence Diagram
 ![Sequence diagram of generating Github Actions workflow](./sequenceDiagram.png)
 
 ##### Pre-requisites
