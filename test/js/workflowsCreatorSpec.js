@@ -54,7 +54,7 @@ describe('Workflow creator', function() {
 		nock.cleanAll();
 	});
 
-	it('should generate workflows for all repos under the specified github org', async function() {
+	it('should generate workflows for all repos under the specified github org', async () => {
 		//given
 		this.timeout(0);
 		const githubOrgName = 'test-migration-org-1-gh';
@@ -62,7 +62,7 @@ describe('Workflow creator', function() {
 		gitCloneStub.returns(Promise.resolve());
 		fsMkDirStub.returns(Promise.resolve());
 		fsExistsStub.returns(true);
-		fsReadFileStub.returns(Promise.resolve('Type1JenkinsSharedLibrary'));
+		fsReadFileStub.returns(Promise.resolve('JenkinsGradleSharedLibrary'));
 		fsCopyFileStub.returns(Promise.resolve());
 		gitAddStub.returns(Promise.resolve());
 		gitCommitStub.returns(Promise.resolve());

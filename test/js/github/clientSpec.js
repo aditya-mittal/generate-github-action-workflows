@@ -51,7 +51,7 @@ describe('Github client', function() {
 			const repoName = 'some-repo';
 			api.get(`/repos/${owner}/${repoName}`).reply(404);
 			//when
-			return assert.isRejected(
+			assert.isRejected(
 				githubClient.getRepo(owner, repoName),
 				Error,
 				`Unable to get repo with name ${repoName}`

@@ -10,7 +10,7 @@ function GitClient(githubUserName, githubUserEmail, githubToken) {
 	this.clone = function(httpsRemoteUrl, pathToCloneRepo, remoteName) {
 		return git.clone({ fs, http, dir: pathToCloneRepo, url: httpsRemoteUrl, remote: remoteName,
 			onAuth: () => ({ username: this.githubToken }),
-			onAuthFailure: () => {console.error('Cant authenticate with GitHub');}
+			onAuthFailure: () => {console.error('Cant authenticate with GitHub while cloning');}
 		});
 	};
 
@@ -30,7 +30,7 @@ function GitClient(githubUserName, githubUserEmail, githubToken) {
 	this.push = function(repoPathOnLocal, remoteName, branchName) {
 		return git.push({fs, http, dir: repoPathOnLocal, remote: remoteName,
 			ref: branchName, onAuth: () => ({ username: this.githubToken }),
-			onAuthFailure: () => {console.error('Cant authenticate with GitHub');}
+			onAuthFailure: () => {console.error('Cant authenticate with GitHub while pushing');}
 		});
 	};
 }

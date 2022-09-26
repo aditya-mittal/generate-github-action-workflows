@@ -1,6 +1,6 @@
 @Library(['my-jenkins-library@release-v1.0']) _
 
-Type1JenkinsSharedLibrary {
+JenkinsGradleSharedLibrary {
     foo = [
        service_name: "bar"
     ]

@@ -2,6 +2,7 @@ const chai = require('chai');
 const chaiAsPromised = require('chai-as-promised');
 chai.use(chaiAsPromised);
 const assert = chai.assert;
+const expect = chai.expect;
 
 const path = require('path');
 const config = require('config');
@@ -10,7 +11,10 @@ const WorkflowTypeIdentifier = require('../../src/workflowTypeIdentifier.js');
 
 describe('WorkflowTypeIdentifier', function() {
 	const workflowTypeIdentifier = new WorkflowTypeIdentifier(config.get('j2ga.jenkins2githubWorkflowsMap'));
-	describe('#getWorkflowType', function(){
+	describe('#getWorkflowType', function() {
+		before(() => {
+			console.log('Workflow identifier started');
+		});
 		it('should identify correct workflow type based on shared pipeline mentioned in Jenkinsfile', async function() {
 			//given
 			const pathToJenkinsFile = path.join(process.cwd(), 'test','resources', 'sharedLibJenkinsfile');
@@ -20,7 +24,7 @@ describe('WorkflowTypeIdentifier', function() {
 			//then
 			assert.strictEqual(workflowType, 'java-gradle-workflow');
 		});
-		it.skip('throw error when there is no known shared pipeline mentioned in Jenkinsfile', async () => {
+		it('throw error when there is no known shared pipeline mentioned in Jenkinsfile', function() {
 			//given
 			const pathToJenkinsFile = path.join(process.cwd(), 'test','resources', 'plainJenkinsfile');
 			const repoName = 'some-repo';
@@ -32,7 +36,7 @@ describe('WorkflowTypeIdentifier', function() {
 				errorMessage
 			);
 		});
-		it.skip('throw error when there is no Jenkinsfile', async () => {
+		it('throw error when there is no Jenkinsfile', function() {
 			//given
 			const nonExistentFile = path.join(process.cwd(), 'test','resources', 'nonExistingFile');
 			const repoName = 'some-repo';

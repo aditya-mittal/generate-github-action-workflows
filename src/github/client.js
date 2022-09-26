@@ -18,8 +18,8 @@ function GithubClient(url, username, privateToken) {
 			.then(response => {
 				return new Repository(response.data.name, response.data.owner.login, response.data.clone_url);
 			}).catch((error) => {
-				console.error(error);
-				throw new Error(`Unable to get repo with name ${repoName}`);
+				console.error(error.message);
+				throw new Error(`Unable to get repo with name ${repoName}, ${error.message}`);
 			});
 	};
 	this.listOrgRepos = function(orgName) {
@@ -34,8 +34,8 @@ function GithubClient(url, username, privateToken) {
 				});
 				return repositoryList;
 			}).catch((error) => {
-				console.error(error);
-				throw new Error(`Unable to get repos for org ${orgName}`);
+				console.error(error.message);
+				throw new Error(`Unable to get repos for org ${orgName}, ${error.message}`);
 			});
 	};
 
