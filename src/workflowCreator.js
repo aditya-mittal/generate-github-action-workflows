@@ -66,15 +66,9 @@ function WorkflowCreator() {
 		const branchName = 'master';
 		const remoteName = 'origin';
 		return gitClient.clone(repo.clone_url, pathToCloneRepo, remoteName)
-			.then(async function() {
-				return await new Promise(function(resolve) {
-					resolve(fsClient.mkdir(pathToWorkflowDir));
-				});
-			})
+			.then(() => fsClient.mkdir(pathToWorkflowDir))
 			.then(() => _getWorkflowType(pathToJenkinsFile, repo.name))
-			.then(async function(workflowType) {
-				await fsClient.copyFile(_getPathToTemplateWorkflowFile(workflowType), pathToRepoWorkflow);
-			})
+			.then((workflowType) => fsClient.copyFile(_getPathToTemplateWorkflowFile(workflowType), pathToRepoWorkflow))
 			.then(() => _replaceRepoSpecificParameters(repo, pathToRepoWorkflow))
 			.then(() => gitClient.add(pathToCloneRepo, repoRelativePathToWorkflow))
 			.then(() => gitClient.commit(pathToCloneRepo, commitWorkflowMessage))
