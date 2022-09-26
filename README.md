@@ -1,13 +1,15 @@
 # j2ga - Migrate Jenkins pipeline(s) to GitHub Action workflow(s)
 
-Migrating CI pipelines from Jenkins to Github Action Workflow(s) for one or more GitHub repository. 
+![Build Status](https://github.com/aditya-mittal/j2ga/workflows/build/badge.svg)
+
+Migrating Jenkins shared library CI pipelines to Github Actions reusable workflow(s) for one or more GitHub repository. 
 - For developer instructions, see the [developer README](DEVELOP.md)
 
 ### Schematic representation 
-![Schematic representation of generating Github Actions workflow](./schematicDiagram.png)
+![Schematic representation](./schematicDiagram.png)
 
 ### Sequence Diagram
-![Sequence diagram of generating Github Actions workflow](./sequenceDiagram.png)
+![Sequence diagram](./sequenceDiagram.png)
 
 ##### Pre-requisites
 
