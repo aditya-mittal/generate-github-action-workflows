@@ -65,7 +65,7 @@ function WorkflowCreator() {
 		const pathToWorkflowDir = _getPathToWorkflowDir(pathToCloneRepo);
 		const pathToRepoWorkflow = _getPathToRepoWorkflow(pathToWorkflowDir);
 		const repoRelativePathToWorkflow = path.join('.github','workflows', 'callerWorkflow.yml');
-		const commitWorkflowMessage = 'Commit github workflow while migrating from Jenkins';
+		const commitWorkflowMessage = 'Add github workflow while migrating from Jenkins';
 		const remoteName = 'origin';
 		return gitClient.clone(repo.clone_url, pathToCloneRepo, remoteName)
 			.then(() => fsClient.mkdir(pathToWorkflowDir))
