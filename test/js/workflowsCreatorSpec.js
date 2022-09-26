@@ -28,7 +28,7 @@ describe('Workflow creator', function() {
 	let gitCommitStub;
 	let gitPushStub;
 	let fsMkDirStub;
-	let fsRmDirStub;
+	let fsRmStub;
 	let fsExistsStub;
 	let fsReadFileStub;
 	let fsCopyFileStub;
@@ -38,7 +38,7 @@ describe('Workflow creator', function() {
 		gitCommitStub = sinon.stub(git, 'commit');
 		gitPushStub = sinon.stub(git, 'push');
 		fsMkDirStub = sinon.stub(fs.promises, 'mkdir');
-		fsRmDirStub = sinon.stub(fs.promises, 'rmdir');
+		fsRmStub = sinon.stub(fs.promises, 'rm');
 		fsExistsStub = sinon.stub(fs, 'existsSync');
 		fsReadFileStub = sinon.stub(fs.promises, 'readFile');
 		fsCopyFileStub = sinon.stub(fs.promises, 'copyFile');
@@ -63,7 +63,7 @@ describe('Workflow creator', function() {
 		githubApi.get(`/orgs/${githubOrgName}/repos`).reply(200, repoList);
 		gitCloneStub.returns(Promise.resolve());
 		fsMkDirStub.returns(Promise.resolve());
-		fsRmDirStub.returns(Promise.resolve());
+		fsRmStub.returns(Promise.resolve());
 		fsExistsStub.returns(true);
 		fsReadFileStub.returns(Promise.resolve('JenkinsGradleSharedLibrary'));
 		fsCopyFileStub.returns(Promise.resolve());
@@ -82,6 +82,6 @@ describe('Workflow creator', function() {
 		sinon.assert.callCount(gitAddStub, 2);
 		sinon.assert.callCount(gitCommitStub, 2);
 		sinon.assert.callCount(gitPushStub, 2);
-		sinon.assert.callCount(fsRmDirStub, 2);
+		sinon.assert.callCount(fsRmStub, 2);
 	});
 });

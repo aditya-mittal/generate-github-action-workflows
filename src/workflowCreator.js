@@ -43,10 +43,6 @@ function WorkflowCreator() {
 		return path.join(pathToWorkflowDir, 'callerWorkflow.yml');
 	};
 
-	var _getWorkflowType = function(pathToJenkinsFile, repoName) {
-		return workflowTypeIdentifier.getWorkflowType(pathToJenkinsFile, repoName);
-	};
-
 	var _replaceRepoSpecificParameters = function(repo, pathToRepoWorkflow) {
 		const options = {
 			files: pathToRepoWorkflow,
@@ -67,13 +63,13 @@ function WorkflowCreator() {
 		const remoteName = 'origin';
 		return gitClient.clone(repo.clone_url, pathToCloneRepo, remoteName)
 			.then(() => fsClient.mkdir(pathToWorkflowDir))
-			.then(() => _getWorkflowType(pathToJenkinsFile, repo.name))
+			.then(() => workflowTypeIdentifier.getWorkflowType(pathToJenkinsFile, repo.name))
 			.then((workflowType) => fsClient.copyFile(_getPathToTemplateWorkflowFile(workflowType), pathToRepoWorkflow))
 			.then(() => _replaceRepoSpecificParameters(repo, pathToRepoWorkflow))
 			.then(() => gitClient.add(pathToCloneRepo, repoRelativePathToWorkflow))
 			.then(() => gitClient.commit(pathToCloneRepo, commitWorkflowMessage))
 			.then(() => gitClient.push(pathToCloneRepo, remoteName, branchName))
-			.then(() => fsClient.rmdir(pathToCloneRepo));
+			.then(() => fsClient.rm(pathToCloneRepo));
 	};
 
 }

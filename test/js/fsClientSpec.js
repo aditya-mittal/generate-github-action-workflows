@@ -36,48 +36,46 @@ describe('FsClient', function() {
 			//given
 
 			const pathToCreateDirectory = path.join(process.cwd(), 'tmp','.github', 'workflows');
-			const errorMessage = 'Error occurred while creating the directory';
+			const errorMessage = `Error occurred while creating directory, ${pathToCreateDirectory}`;
 			mkdirStub.withArgs(pathToCreateDirectory, {recursive: true}).returns(Promise.reject(new Error(errorMessage)));
 			//when & then
-			assert.isRejected(
+			return assert.isRejected(
 				fsClient.mkdir(pathToCreateDirectory, {recursive: true}),
 				Error,
 				errorMessage
 			);
-			sinon.assert.calledWith(mkdirStub, pathToCreateDirectory, { recursive: true });
 		});
 	});
-	describe('rmdir', function() {
-		let rmdirStub;
+	describe('rm', function() {
+		let rmStub;
 		before(() => {
-			rmdirStub = sinon.stub(fs.promises, 'rmdir');
+			rmStub = sinon.stub(fs.promises, 'rm');
 		});
 		after(() => {
-			rmdirStub.restore();
+			rmStub.restore();
 		});
 		it('should remove a directory', async function() {
 			//given
 			const pathToRemoveDirectory = path.join(process.cwd(), '/tmp');
 
-			rmdirStub.withArgs(pathToRemoveDirectory, {recursive: true}).returns(Promise.resolve());
+			rmStub.withArgs(pathToRemoveDirectory, {recursive: true}).returns(Promise.resolve());
 			//when
-			await fsClient.rmdir(pathToRemoveDirectory);
+			await fsClient.rm(pathToRemoveDirectory);
 			//then
-			sinon.assert.calledWith(rmdirStub, pathToRemoveDirectory, { recursive: true });
-			expect(rmdirStub.called).to.equal(true);
+			sinon.assert.calledWith(rmStub, pathToRemoveDirectory, { recursive: true });
+			expect(rmStub.called).to.equal(true);
 		});
 		it('should handle error when removing the directory', async function() {
 			//given
 			const pathToRemoveDirectory = path.join(process.cwd(), '/tmp');
 			const errorMessage = 'Error occurred while removing the directory';
-			rmdirStub.withArgs(pathToRemoveDirectory, {recursive: true}).returns(Promise.reject(new Error(errorMessage)));
+			rmStub.withArgs(pathToRemoveDirectory, {recursive: true}).returns(Promise.reject(new Error(errorMessage)));
 			//when & then
-			assert.isRejected(
-				fsClient.rmdir(pathToRemoveDirectory, {recursive: true}),
+			return assert.isRejected(
+				fsClient.rm(pathToRemoveDirectory, {recursive: true}),
 				Error,
 				errorMessage
 			);
-			sinon.assert.calledWith(rmdirStub, pathToRemoveDirectory, { recursive: true });
 		});
 	});
 	describe('copyCallerWorkflow', function() {
@@ -107,12 +105,11 @@ describe('FsClient', function() {
 			const errorMessage = 'Error occurred while copying';
 			copyFileStub.withArgs(pathToSourceFile, pathToDestinationFile).returns(Promise.reject(new Error(errorMessage)));
 			//when & then
-			assert.isRejected(
+			return assert.isRejected(
 				fsClient.copyFile(pathToSourceFile, pathToDestinationFile),
 				Error,
 				errorMessage
 			);
-			sinon.assert.calledWith(copyFileStub, pathToSourceFile, pathToDestinationFile);
 		});
 	});
 	describe('readFile', function() {
@@ -137,15 +134,14 @@ describe('FsClient', function() {
 		it('should handle error when reading the file', () => {
 			//given
 			const pathToNonExistentFile = path.join(process.cwd(), 'test','resources', 'nonExistingFile');
-			const errorMessage = 'Error occurred while reading the file';
+			const errorMessage = `Error occured while reading the file, ${pathToNonExistentFile}`;
 			readFileStub.withArgs(pathToNonExistentFile).returns(Promise.reject(new Error(errorMessage)));
 			//when & then
-			assert.isRejected(
+			return assert.isRejected(
 				fsClient.readFile(pathToNonExistentFile),
 				Error,
 				errorMessage
 			);
-			sinon.assert.calledWith(readFileStub, pathToNonExistentFile);
 		});
 	});
 });
