@@ -10,8 +10,7 @@ function WorkflowTypeIdentifier(workflowTypeMap) {
 		if( !fs.existsSync(pathToFile) ) {
 			return Promise.reject(new Error(`File ${pathToFile} does not exist for repo ${repoName}`))
 				.then(() => {}, (error) => {
-					console.error(error);
-					throw new Error(error);
+					throw new Error(error.message);
 				});
 		}
 		return fsClient.readFile(pathToFile)
