@@ -11,11 +11,16 @@ function GitClient(githubUserName, githubUserEmail, githubToken) {
 		return git.clone({ fs, http, dir: pathToCloneRepo, url: httpsRemoteUrl, remote: remoteName,
 			onAuth: () => ({ username: this.githubToken }),
 			onAuthFailure: () => {console.error('Cant authenticate with GitHub while cloning');}
+		}).catch((err) => {
+			throw new Error(`Error occurred while cloning repo ${httpsRemoteUrl}, error: ${err}`);
 		});
 	};
 
 	this.add = function(repoPathOnLocal, relativeFilePathInRepo) {
-		return git.add({ fs, dir: repoPathOnLocal, filepath: relativeFilePathInRepo});
+		return git.add({ fs, dir: repoPathOnLocal, filepath: relativeFilePathInRepo})
+			.catch((err) => {
+				throw new Error(`Error occurred while staging the file ${relativeFilePathInRepo} for repo ${repoPathOnLocal}, error: ${err}`);
+			});
 	};
 
 	this.commit = function(repoPathOnLocal, commitMessage) {
@@ -24,6 +29,8 @@ function GitClient(githubUserName, githubUserEmail, githubToken) {
 				name: this.githubUserName,
 				email: this.githubUserEmail,
 			}
+		}).catch((err) => {
+			throw new Error(`Error occurred while committing for repo ${repoPathOnLocal}, error: ${err}`);
 		});
 	};
 
@@ -31,6 +38,8 @@ function GitClient(githubUserName, githubUserEmail, githubToken) {
 		return git.push({fs, http, dir: repoPathOnLocal, remote: remoteName,
 			ref: branchName, onAuth: () => ({ username: this.githubToken }),
 			onAuthFailure: () => {console.error('Cant authenticate with GitHub while pushing');}
+		}).catch((err) => {
+			throw new Error(`Error occurred while pushing to remote ${remoteName} for repo ${repoPathOnLocal} on branch ${branchName}, error: ${err}`);
 		});
 	};
 }

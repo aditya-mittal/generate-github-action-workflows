@@ -18,7 +18,6 @@ function GithubClient(url, username, privateToken) {
 			.then(response => {
 				return new Repository(response.data.name, response.data.owner.login, response.data.clone_url);
 			}).catch((error) => {
-				console.error(error.message);
 				throw new Error(`Unable to get repo with name ${repoName}, ${error.message}`);
 			});
 	};
@@ -30,12 +29,11 @@ function GithubClient(url, username, privateToken) {
 			.then(response => {
 				let repositoryList = [];
 				response.data.forEach(function(repository) {
-					repositoryList.push(new Repository(repository.name, repository.owner.login, repository.clone_url));
+					repositoryList.push(new Repository(repository.name, repository.owner.login, repository.clone_url, repository.default_branch));
 				});
 				return repositoryList;
 			}).catch((error) => {
-				console.error(error.message);
-				throw new Error(`Unable to get repos for org ${orgName}, ${error.message}`);
+				throw new Error(`Unable to get list of repos for org ${orgName}, ${error.message}`);
 			});
 	};
 

@@ -30,7 +30,7 @@ describe('Git', function() {
 			const repoName = 'some-repo';
 			const pathToCloneRepo = path.join(process.cwd(), '/tmp','migrate', repoName);
 			const remoteName = 'gitlab';
-			cloneStub.withArgs({fs, http, pathToCloneRepo, url: httpsRemoteUrl, remote: remoteName}).returns(Promise.resolve());
+			cloneStub.returns(Promise.resolve());
 			//when
 			await gitClient.clone(httpsRemoteUrl, pathToCloneRepo, remoteName);
 			//then
@@ -71,7 +71,7 @@ describe('Git', function() {
 			const repoPathOnLocal = path.join(process.cwd(), repoName);
 			const fileName = 'test.txt';
 			const relativeFilePathInRepo = path.join('.github', 'workflows', fileName);
-			addStub.withArgs({fs, repoPathOnLocal, relativeFilePathInRepo}).returns(Promise.resolve());
+			addStub.returns(Promise.resolve());
 			//when
 			await gitClient.add(repoPathOnLocal, relativeFilePathInRepo);
 			//then

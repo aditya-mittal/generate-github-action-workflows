@@ -70,12 +70,14 @@ describe('Github client', function() {
 			repositoryList.should.have.lengthOf(2);
 			repositoryList[0].should.be.a('object');
 			repositoryList[0].should.be.instanceof(Repository);
-			repositoryList[0].should.have.all.keys('name', 'owner_name', 'clone_url');
+			repositoryList[0].should.have.all.keys('name', 'owner_name', 'clone_url', 'default_branch');
 			repositoryList[0].name.should.equal('Hello-World');
 			repositoryList[0].owner_name.should.equal('octocat');
-			repositoryList[1].should.have.all.keys('name', 'owner_name', 'clone_url');
+			repositoryList[0].default_branch.should.equal('master');
+			repositoryList[1].should.have.all.keys('name', 'owner_name', 'clone_url', 'default_branch');
 			repositoryList[1].name.should.equal('Hey-World');
 			repositoryList[1].owner_name.should.equal('octocat');
+			repositoryList[1].default_branch.should.equal('main');
 		});
 	});
 });

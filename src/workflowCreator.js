@@ -16,7 +16,10 @@ function WorkflowCreator() {
 	this.createWorkflows = async function(githubOrgName) {
 		try {
 			let repoList = await githubClient.listOrgRepos(githubOrgName)
-				.then(repoList => repoList);
+				.then(repoList => repoList)
+				.catch((err) => {
+					console.error(err.message);
+				});
 			await _createWorkflows(this, repoList);
 			return 0;
 		} catch(error) {
@@ -59,7 +62,6 @@ function WorkflowCreator() {
 		const pathToRepoWorkflow = _getPathToRepoWorkflow(pathToWorkflowDir);
 		const repoRelativePathToWorkflow = path.join('.github','workflows', 'callerWorkflow.yml');
 		const commitWorkflowMessage = 'Commit github workflow while migrating from Jenkins';
-		const branchName = 'master';
 		const remoteName = 'origin';
 		return gitClient.clone(repo.clone_url, pathToCloneRepo, remoteName)
 			.then(() => fsClient.mkdir(pathToWorkflowDir))
@@ -68,7 +70,7 @@ function WorkflowCreator() {
 			.then(() => _replaceRepoSpecificParameters(repo, pathToRepoWorkflow))
 			.then(() => gitClient.add(pathToCloneRepo, repoRelativePathToWorkflow))
 			.then(() => gitClient.commit(pathToCloneRepo, commitWorkflowMessage))
-			.then(() => gitClient.push(pathToCloneRepo, remoteName, branchName))
+			.then(() => gitClient.push(pathToCloneRepo, remoteName, repo.default_branch))
 			.then(() => fsClient.rm(pathToCloneRepo))
 			.catch((err) => {
 				console.error(err.message);
