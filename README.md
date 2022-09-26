@@ -1,6 +1,6 @@
 # j2ga - Migrate Jenkins pipeline(s) to GitHub Action workflow(s)
 
-![Build Status](https://github.com/aditya-mittal/j2ga/workflows/build/badge.svg)
+[![build](https://github.com/aditya-mittal/j2ga/actions/workflows/build.yml/badge.svg)](https://github.com/aditya-mittal/j2ga/actions/workflows/build.yml)
 
 Migrating Jenkins shared library CI pipelines to Github Actions reusable workflow(s) for one or more GitHub repository. 
 - For developer instructions, see the [developer README](DEVELOP.md)
