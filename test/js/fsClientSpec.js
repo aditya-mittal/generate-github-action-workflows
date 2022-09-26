@@ -47,6 +47,39 @@ describe('FsClient', function() {
 			sinon.assert.calledWith(mkdirStub, pathToCreateDirectory, { recursive: true });
 		});
 	});
+	describe('rmdir', function() {
+		let rmdirStub;
+		before(() => {
+			rmdirStub = sinon.stub(fs.promises, 'rmdir');
+		});
+		after(() => {
+			rmdirStub.restore();
+		});
+		it('should remove a directory', async function() {
+			//given
+			const pathToRemoveDirectory = path.join(process.cwd(), '/tmp');
+
+			rmdirStub.withArgs(pathToRemoveDirectory, {recursive: true}).returns(Promise.resolve());
+			//when
+			await fsClient.rmdir(pathToRemoveDirectory);
+			//then
+			sinon.assert.calledWith(rmdirStub, pathToRemoveDirectory, { recursive: true });
+			expect(rmdirStub.called).to.equal(true);
+		});
+		it('should handle error when removing the directory', async function() {
+			//given
+			const pathToRemoveDirectory = path.join(process.cwd(), '/tmp');
+			const errorMessage = 'Error occurred while removing the directory';
+			rmdirStub.withArgs(pathToRemoveDirectory, {recursive: true}).returns(Promise.reject(new Error(errorMessage)));
+			//when & then
+			assert.isRejected(
+				fsClient.rmdir(pathToRemoveDirectory, {recursive: true}),
+				Error,
+				errorMessage
+			);
+			sinon.assert.calledWith(rmdirStub, pathToRemoveDirectory, { recursive: true });
+		});
+	});
 	describe('copyCallerWorkflow', function() {
 		let copyFileStub;
 		before(() => {

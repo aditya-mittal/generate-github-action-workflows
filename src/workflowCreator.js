@@ -72,7 +72,8 @@ function WorkflowCreator() {
 			.then(() => _replaceRepoSpecificParameters(repo, pathToRepoWorkflow))
 			.then(() => gitClient.add(pathToCloneRepo, repoRelativePathToWorkflow))
 			.then(() => gitClient.commit(pathToCloneRepo, commitWorkflowMessage))
-			.then(() => gitClient.push(pathToCloneRepo, remoteName, branchName));
+			.then(() => gitClient.push(pathToCloneRepo, remoteName, branchName))
+			.then(() => fsClient.rmdir(pathToCloneRepo));
 	};
 
 }

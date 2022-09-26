@@ -10,6 +10,15 @@ function FsClient() {
 		});
 	};
 
+	this.rmdir = function(path) {
+		return fs.promises.rmdir(path, { recursive: true }, (err) => {
+			if (err) {
+				console.error(`Error occurred while deleting directory, ${path}`);
+				throw new Error(`Error occurred while deleting directory, ${path}`);
+			}
+		});
+	};
+
 	this.copyFile = function(src, dest) {
 		return fs.promises.copyFile(src, dest, (err) => {
 			if(err) {
