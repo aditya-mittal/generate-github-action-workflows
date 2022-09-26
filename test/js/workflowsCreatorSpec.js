@@ -36,10 +36,10 @@ describe('Workflow creator', function() {
 		gitAddStub = sinon.stub(git, 'add');
 		gitCommitStub = sinon.stub(git, 'commit');
 		gitPushStub = sinon.stub(git, 'push');
-		fsMkDirStub = sinon.stub(fs, 'mkdirSync');
+		fsMkDirStub = sinon.stub(fs.promises, 'mkdir');
 		fsExistsStub = sinon.stub(fs, 'existsSync');
 		fsReadFileStub = sinon.stub(fs.promises, 'readFile');
-		fsCopyFileStub = sinon.stub(fs, 'copyFile');
+		fsCopyFileStub = sinon.stub(fs.promises, 'copyFile');
 		githubApi = nock(
 			'https://' + GITHUB_API_URL, {
 				reqHeaders: {

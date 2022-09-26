@@ -3,13 +3,26 @@ const fs = require('fs');
 function FsClient() {
 
 	this.mkdir = function(path) {
-		return fs.mkdirSync(path, { recursive: true });
+		return fs.promises.mkdir(path, { recursive: true }, (err) => {
+			if(err) {
+				console.error(`Error occurred while creating directory, ${path}`);
+			}
+		});
 	};
 
 	this.copyFile = function(src, dest) {
-		return fs.copyFile(src, dest, (err) => {
+		return fs.promises.copyFile(src, dest, (err) => {
 			if(err) {
 				console.error(`Error occurred while copying the src file, ${src} to destination ${dest}`);
+			}
+		});
+	};
+
+	this.readFile = function(pathToFile) {
+		return fs.promises.readFile(pathToFile, (err) => {
+			if (err) {
+				console.error(`Error occured while reading the file ${pathToFile}`);
+				throw new Error(`Error occured while reading the file ${pathToFile}`);
 			}
 		});
 	};
