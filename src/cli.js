@@ -1,7 +1,10 @@
 #!/usr/bin/env node
 
 const { Command } = require('commander');
+
+const log4js = require('./logger.js');
 const WorkflowCreator = require('./workflowCreator.js');
+const logger = log4js.getLogger('cli');
 
 const workflowCreator = new WorkflowCreator();
 const program = new Command();
@@ -19,6 +22,6 @@ async function generateWorkflows(githubOrgName) {
 	try {
 		await workflowCreator.createWorkflows(githubOrgName);
 	} catch(error) {
-		console.error(error.message);
+		logger.error(error.message);
 	}
 }

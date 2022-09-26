@@ -2,10 +2,12 @@ const path = require('path');
 const config = require('config');
 const replace = require('replace-in-file');
 
+const log4js = require('./logger.js');
 const GithubClient = require('./github/client.js');
 const GitClient = require('./gitClient.js');
 const FsClient = require('./fsClient.js');
 const WorkflowTypeIdentifier = require('./workflowTypeIdentifier.js');
+const logger = log4js.getLogger('WorkflowCreator');
 
 function WorkflowCreator() {
 	const fsClient = new FsClient();
@@ -15,11 +17,13 @@ function WorkflowCreator() {
 
 	this.createWorkflows = async function(githubOrgName) {
 		try {
+			logger.info(`Migrating repos under org: ${githubOrgName} from Jenkins to Github Actions`);
 			let repoList = await githubClient.listOrgRepos(githubOrgName)
 				.then(repoList => repoList)
 				.catch((err) => {
-					console.error(err.message);
+					logger.error(`Unable to get list of repo for org: ${githubOrgName}, error: ${err.message}`);
 				});
+			logger.info(`Migrating total ${repoList.length} repos under org: ${githubOrgName}`);
 			await _createWorkflows(this, repoList);
 			return 0;
 		} catch(error) {
@@ -31,7 +35,7 @@ function WorkflowCreator() {
 		const promises = repoList.map(repo => _createWorkflow(repo));
 
 		return await Promise.all(promises)
-			.catch((err) => console.error(err.message));
+			.catch((err) => logger.error(err.message));
 	};
 
 	var _getPathToWorkflowDir = function(pathToCloneRepo) {
@@ -72,8 +76,9 @@ function WorkflowCreator() {
 			.then(() => gitClient.commit(pathToCloneRepo, commitWorkflowMessage))
 			.then(() => gitClient.push(pathToCloneRepo, remoteName, repo.default_branch))
 			.then(() => fsClient.rm(pathToCloneRepo))
+			.then(() => logger.info(`Migrated repo: ${repo.name} successfully`))
 			.catch((err) => {
-				console.error(err.message);
+				logger.error(`Unable to migrate repo: ${repo.name}, error: ${err.message}`);
 			});
 	};
 

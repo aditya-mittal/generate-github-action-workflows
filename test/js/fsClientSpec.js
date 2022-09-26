@@ -36,7 +36,7 @@ describe('FsClient', function() {
 			//given
 
 			const pathToCreateDirectory = path.join(process.cwd(), 'tmp','.github', 'workflows');
-			const errorMessage = `Error occurred while creating directory, ${pathToCreateDirectory}`;
+			const errorMessage = `Error occurred while creating directory: ${pathToCreateDirectory}`;
 			mkdirStub.withArgs(pathToCreateDirectory, {recursive: true}).returns(Promise.reject(new Error(errorMessage)));
 			//when & then
 			return assert.isRejected(
@@ -134,7 +134,7 @@ describe('FsClient', function() {
 		it('should handle error when reading the file', () => {
 			//given
 			const pathToNonExistentFile = path.join(process.cwd(), 'test','resources', 'nonExistingFile');
-			const errorMessage = `Error occured while reading the file, ${pathToNonExistentFile}`;
+			const errorMessage = `Error occured while reading the file: ${pathToNonExistentFile}`;
 			readFileStub.withArgs(pathToNonExistentFile).returns(Promise.reject(new Error(errorMessage)));
 			//when & then
 			return assert.isRejected(

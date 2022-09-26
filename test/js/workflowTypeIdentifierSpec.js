@@ -28,7 +28,7 @@ describe('WorkflowTypeIdentifier', function() {
 			//given
 			const pathToJenkinsFile = path.join(process.cwd(), 'test','resources', 'plainJenkinsfile');
 			const repoName = 'some-repo';
-			const errorMessage = `No mapping found for shared lib and Github workflow for repo ${repoName}`;
+			const errorMessage = `No mapping found for shared lib and Github workflow for repo: ${repoName}`;
 			//when & then
 			assert.isRejected(
 				workflowTypeIdentifier.getWorkflowType(pathToJenkinsFile, repoName),
@@ -40,7 +40,7 @@ describe('WorkflowTypeIdentifier', function() {
 			//given
 			const nonExistentFile = path.join(process.cwd(), 'test','resources', 'nonExistingFile');
 			const repoName = 'some-repo';
-			const errorMessage = `File ${nonExistentFile} does not exist for repo ${repoName}`;
+			const errorMessage = `File: ${nonExistentFile} does not exist for repo: ${repoName}`;
 			//when & then
 			assert.isRejected(
 				workflowTypeIdentifier.getWorkflowType(nonExistentFile, repoName),

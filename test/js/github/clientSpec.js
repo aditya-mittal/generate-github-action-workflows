@@ -54,7 +54,7 @@ describe('Github client', function() {
 			assert.isRejected(
 				githubClient.getRepo(owner, repoName),
 				Error,
-				`Unable to get repo with name ${repoName}`
+				`Unable to get repo: ${repoName}`
 			);
 		});
 	});

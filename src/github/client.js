@@ -1,5 +1,8 @@
 const axios = require('axios').default;
+
+const log4js = require('../logger.js');
 const Repository = require('./model/repository.js');
+const logger = log4js.getLogger('GithubClient');
 
 function GithubClient(url, username, privateToken) {
 	this.url = url;
@@ -17,8 +20,9 @@ function GithubClient(url, username, privateToken) {
 		return axios(params)
 			.then(response => {
 				return new Repository(response.data.name, response.data.owner.login, response.data.clone_url);
-			}).catch((error) => {
-				throw new Error(`Unable to get repo with name ${repoName}, ${error.message}`);
+			}).catch((err) => {
+				logger.error(`Unable to get repo: ${repoName}, error: ${err.message}`);
+				throw new Error(`Unable to get repo: ${repoName}, error: ${err.message}`);
 			});
 	};
 	this.listOrgRepos = function(orgName) {
@@ -32,8 +36,9 @@ function GithubClient(url, username, privateToken) {
 					repositoryList.push(new Repository(repository.name, repository.owner.login, repository.clone_url, repository.default_branch));
 				});
 				return repositoryList;
-			}).catch((error) => {
-				throw new Error(`Unable to get list of repos for org ${orgName}, ${error.message}`);
+			}).catch((err) => {
+				logger.error(`Unable to get list of repos for org: ${orgName}, error: ${err.message}`);
+				throw new Error(`Unable to get list of repos for org: ${orgName}, error: ${err.message}`);
 			});
 	};
 
