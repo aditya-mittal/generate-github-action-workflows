@@ -78,6 +78,22 @@ describe('Git', function() {
 			sinon.assert.calledWith(addStub, {fs, dir: repoPathOnLocal, filepath: relativeFilePathInRepo});
 			expect(addStub.called).to.equal(true);
 		});
+		it('should handle error when staging the repo', async function() {
+			//given
+			const repoName = 'some-repo';
+			const repoPathOnLocal = path.join(process.cwd(), repoName);
+			const fileName = 'test.txt';
+			const relativeFilePathInRepo = path.join('.github', 'workflows', fileName);
+			const errorMessage = 'Error occurred while staging the file';
+			addStub.returns(Promise.reject(new Error(errorMessage)));
+			//when & then
+			assert.isRejected(
+				gitClient.add(repoPathOnLocal, relativeFilePathInRepo),
+				Error,
+				errorMessage
+			);
+			sinon.assert.calledWith(addStub, {fs, dir: repoPathOnLocal, filepath: relativeFilePathInRepo});
+		});
 	});
 	describe('Commit', function() {
 		let commitStub;

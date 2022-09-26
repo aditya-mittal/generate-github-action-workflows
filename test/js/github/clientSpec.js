@@ -59,7 +59,7 @@ describe('Github client', function() {
 		});
 	});
 	describe('#listOrgRepos', function() {
-		it('should get the repo based on name provided', async () => {
+		it('should get the list of repos under specified org', async () => {
 			//given
 			const orgName = 'some-org';
 			api.get(`/orgs/${orgName}/repos`).reply(200, repoList);
@@ -78,6 +78,17 @@ describe('Github client', function() {
 			repositoryList[1].name.should.equal('Hey-World');
 			repositoryList[1].owner_name.should.equal('octocat');
 			repositoryList[1].default_branch.should.equal('main');
+		});
+		it('should throw error when github returns 404 on list repo', async () => {
+			//given
+			const orgName = 'some-org';
+			api.get(`/orgs/${orgName}/repos`).reply(404);
+			//when
+			assert.isRejected(
+				githubClient.listOrgRepos(orgName),
+				Error,
+				`Unable to get list of repos for org: ${orgName}`
+			);
 		});
 	});
 });
