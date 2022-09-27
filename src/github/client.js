@@ -2,6 +2,7 @@ const axios = require('axios').default;
 
 const log4js = require('../logger.js');
 const Repository = require('./model/repository.js');
+const WorkflowRun = require('./model/workflowRun.js');
 const logger = log4js.getLogger('GithubClient');
 
 function GithubClient(url, username, privateToken) {
@@ -25,6 +26,7 @@ function GithubClient(url, username, privateToken) {
 				throw new Error(`Unable to get repo: ${repoName}, error: ${err.message}`);
 			});
 	};
+
 	this.listOrgRepos = function(orgName) {
 		const path = `orgs/${orgName}/repos`;
 		let params = this._getParams('GET', path);
@@ -39,6 +41,23 @@ function GithubClient(url, username, privateToken) {
 			}).catch((err) => {
 				logger.error(`Unable to get list of repos for org: ${orgName}, error: ${err.message}`);
 				throw new Error(`Unable to get list of repos for org: ${orgName}, error: ${err.message}`);
+			});
+	};
+
+	this.listRepoWorkflowRuns = function(orgName, repoName) {
+		const path = `repos/${orgName}/${repoName}/actions/runs`;
+		let params = this._getParams('GET', path);
+
+		return axios(params)
+			.then(response => {
+				let repoWorkflowRunList = [];
+				response.data.workflow_runs.forEach(function(workflowRun) {
+					repoWorkflowRunList.push(new WorkflowRun(workflowRun.id, workflowRun.name, workflowRun.path, workflowRun.status, workflowRun.conclusion, workflowRun.created_at));
+				});
+				return repoWorkflowRunList;
+			}).catch((err) => {
+				logger.error(`Unable to get list of workflow runs for repo: ${repoName}, org: ${orgName}, error: ${err.message}`);
+				throw new Error(`Unable to get list of workflow runs for repo: ${repoName}, org: ${orgName}, error: ${err.message}`);
 			});
 	};
 

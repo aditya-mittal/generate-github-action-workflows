@@ -9,8 +9,10 @@ const config = require('config');
 
 const GithubClient = require('../../../src/github/client.js');
 const Repository = require('../../../src/github/model/repository.js');
+const WorkflowRun = require('../../../src/github/model/workflowRun.js');
 const repoDetails = require('../../resources/github/repoDetails.json');
 const repoList = require('../../resources/github/repoList.json');
+const repoWorkflowRunList = require('../../resources/github/workflowRunList.json');
 
 describe('Github client', function() {
 	const GITHUB_API_URL = config.get('j2ga.github.url');
@@ -88,6 +90,44 @@ describe('Github client', function() {
 				githubClient.listOrgRepos(orgName),
 				Error,
 				`Unable to get list of repos for org: ${orgName}`
+			);
+		});
+	});
+
+	describe('#listRepoWorkflowRuns', function() {
+		it('should get the list of workflowRuns for a specific repo under specified org', async () => {
+			//given
+			const orgName = 'some-org';
+			const repoName = 'soe-repo';
+			api.get(`/repos/${orgName}/${repoName}/actions/runs`).reply(200, repoWorkflowRunList);
+			//when
+			const workflowRunList = await githubClient.listRepoWorkflowRuns(orgName, repoName);
+			//then
+			workflowRunList.should.be.an('array');
+			workflowRunList.should.have.lengthOf(2);
+			workflowRunList[0].should.be.a('object');
+			workflowRunList[0].should.be.instanceof(WorkflowRun);
+			workflowRunList[0].should.have.all.keys('id', 'name', 'path', 'status', 'conclusion', 'created_at');
+			workflowRunList[0].name.should.equal('Build');
+			workflowRunList[0].path.should.equal('.github/workflows/build.yml');
+			workflowRunList[0].status.should.equal('completed');
+			workflowRunList[0].conclusion.should.equal('success');
+			workflowRunList[1].should.have.all.keys('id', 'name', 'path', 'status', 'conclusion', 'created_at');
+			workflowRunList[1].name.should.equal('Build');
+			workflowRunList[1].path.should.equal('.github/workflows/build.yml');
+			workflowRunList[1].status.should.equal('completed');
+			workflowRunList[1].conclusion.should.equal('failure');
+		});
+		it('should throw error when github returns 404 on list workflow runs for a repo', async () => {
+			//given
+			const orgName = 'some-org';
+			const repoName = 'some-repo';
+			api.get(`/orgs/${orgName}/${repoName}/actions/runs`).reply(404);
+			//when
+			assert.isRejected(
+				githubClient.listRepoWorkflowRuns(orgName, repoName),
+				Error,
+				`Unable to get list of workflow runs for repo: ${repoName}, org: ${orgName}`
 			);
 		});
 	});

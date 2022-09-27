@@ -1,0 +1,9 @@
+j2ga:
+  github:
+    url: mock.api.github.com
+    username: aditya-mittal
+    email: abc@gmail.com
+    token: your_github_token
+  jenkins2githubWorkflowsMap:
+    JenkinsGradleSharedLibrary: java-gradle-workflow
+    JenkinsMavenSharedLibrary: java-maven-workflow
