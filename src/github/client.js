@@ -1,4 +1,5 @@
 const axios = require('axios').default;
+const _ = require('lodash');
 
 const log4js = require('../logger.js');
 const Repository = require('./model/repository.js');
@@ -54,6 +55,7 @@ function GithubClient(url, username, privateToken) {
 					response.data.workflow_runs.forEach(function(workflowRun) {
 						repoWorkflowRunList.push(new WorkflowRun(workflowRun.id, workflowRun.name, workflowRun.path, workflowRun.status, workflowRun.conclusion, workflowRun.created_at));
 					});
+					repoWorkflowRunList = _.orderBy(repoWorkflowRunList, ['created_at'], ['desc']);
 					return repoWorkflowRunList;
 				} else {
 					return Promise.reject(new Error(`No workflows run for this repo: ${repoName}, org: ${orgName} yet`));

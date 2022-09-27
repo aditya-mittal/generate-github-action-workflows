@@ -96,7 +96,7 @@ describe('Github client', function() {
 	});
 
 	describe('#listRepoWorkflowRuns', function() {
-		it('should get the list of workflowRuns for a specific repo under specified org', async () => {
+		it('should get the list of workflowRuns for a specific repo under specified org sorted in descending order of created_at', async () => {
 			//given
 			const orgName = 'some-org';
 			const repoName = 'some-repo';
@@ -109,15 +109,17 @@ describe('Github client', function() {
 			workflowRunList[0].should.be.a('object');
 			workflowRunList[0].should.be.instanceof(WorkflowRun);
 			workflowRunList[0].should.have.all.keys('id', 'name', 'path', 'status', 'conclusion', 'created_at');
+			workflowRunList[0].id.should.equal(30433643);
 			workflowRunList[0].name.should.equal('Build');
 			workflowRunList[0].path.should.equal('.github/workflows/build.yml');
 			workflowRunList[0].status.should.equal('completed');
-			workflowRunList[0].conclusion.should.equal('success');
+			workflowRunList[0].conclusion.should.equal('failure');
 			workflowRunList[1].should.have.all.keys('id', 'name', 'path', 'status', 'conclusion', 'created_at');
+			workflowRunList[1].id.should.equal(30433642);
 			workflowRunList[1].name.should.equal('Build');
 			workflowRunList[1].path.should.equal('.github/workflows/build.yml');
 			workflowRunList[1].status.should.equal('completed');
-			workflowRunList[1].conclusion.should.equal('failure');
+			workflowRunList[1].conclusion.should.equal('success');
 		});
 		it('should reject promise when github returns no workflows for a repo who has no workflow run yet', async () => {
 			//given

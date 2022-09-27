@@ -1,7 +1,6 @@
 const path = require('path');
 const config = require('config');
 const replace = require('replace-in-file');
-const _ = require('lodash');
 
 const log4js = require('./logger.js');
 const GithubClient = require('./github/client.js');
@@ -108,10 +107,7 @@ function WorkflowCreator() {
 
 	var _getWorkflowStatus = async function(githubOrgName, repo) {
 		return githubClient.listRepoWorkflowRuns(githubOrgName, repo.name)
-			.then((workflowRuns) => {
-				workflowRuns = _.orderBy(workflowRuns, ['created_at'], ['desc']);
-				return workflowRuns[0].conclusion;
-			})
+			.then((workflowRuns) => workflowRuns[0].conclusion)
 			.then((workflowStatus) => {
 				if(workflowStatus === 'success') {
 					logger.info(`Workflow completed successfully for repo: ${repo.name}`);
