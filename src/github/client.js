@@ -47,14 +47,17 @@ function GithubClient(url, username, privateToken) {
 	this.listRepoWorkflowRuns = function(orgName, repoName) {
 		const path = `repos/${orgName}/${repoName}/actions/runs`;
 		let params = this._getParams('GET', path);
-
 		return axios(params)
 			.then(response => {
 				let repoWorkflowRunList = [];
-				response.data.workflow_runs.forEach(function(workflowRun) {
-					repoWorkflowRunList.push(new WorkflowRun(workflowRun.id, workflowRun.name, workflowRun.path, workflowRun.status, workflowRun.conclusion, workflowRun.created_at));
-				});
-				return repoWorkflowRunList;
+				if(response.data.total_count > 0) {
+					response.data.workflow_runs.forEach(function(workflowRun) {
+						repoWorkflowRunList.push(new WorkflowRun(workflowRun.id, workflowRun.name, workflowRun.path, workflowRun.status, workflowRun.conclusion, workflowRun.created_at));
+					});
+					return repoWorkflowRunList;
+				} else {
+					return Promise.reject(new Error(`No workflows run for this repo: ${repoName}, org: ${orgName} yet`));
+				}
 			}).catch((err) => {
 				logger.error(`Unable to get list of workflow runs for repo: ${repoName}, org: ${orgName}, error: ${err.message}`);
 				throw new Error(`Unable to get list of workflow runs for repo: ${repoName}, org: ${orgName}, error: ${err.message}`);

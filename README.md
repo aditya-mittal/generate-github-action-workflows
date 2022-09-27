@@ -55,6 +55,12 @@ $ j2ga -h
 $ j2ga create-workflows my-github-org
 ```
 
+### Get github action workflows status for all repos under specified org
+
+```bash
+$ j2ga get-workflows-status my-github-org
+```
+
 ### Clean up
 
 Clean up any installed binary for migration

@@ -1,6 +1,7 @@
 const path = require('path');
 const config = require('config');
 const replace = require('replace-in-file');
+const _ = require('lodash');
 
 const log4js = require('./logger.js');
 const GithubClient = require('./github/client.js');
@@ -31,8 +32,31 @@ function WorkflowCreator() {
 		}
 	};
 
+	this.getWorkflowsStatus = async function(githubOrgName) {
+		try {
+			logger.info(`Getting workflow status for repos under org: ${githubOrgName}`);
+			let repoList = await githubClient.listOrgRepos(githubOrgName)
+				.then(repoList => repoList)
+				.catch((err) => {
+					logger.error(`Unable to get list of repo for org: ${githubOrgName}, error: ${err.message}`);
+				});
+			logger.info(`Getting workflow status for total ${repoList.length} repos under org: ${githubOrgName}`);
+			await _getWorkflowsStatus(this, githubOrgName, repoList);
+			return 0;
+		} catch(error) {
+			return 1;
+		}
+	};
+
 	var _createWorkflows = async function(self, repoList) {
 		const promises = repoList.map(repo => _createWorkflow(repo));
+
+		return await Promise.all(promises)
+			.catch((err) => logger.error(err.message));
+	};
+
+	var _getWorkflowsStatus = async function(self, githubOrgName, repoList) {
+		const promises = repoList.map(repo => _getWorkflowStatus(githubOrgName, repo));
 
 		return await Promise.all(promises)
 			.catch((err) => logger.error(err.message));
@@ -82,5 +106,22 @@ function WorkflowCreator() {
 			});
 	};
 
+	var _getWorkflowStatus = async function(githubOrgName, repo) {
+		return githubClient.listRepoWorkflowRuns(githubOrgName, repo.name)
+			.then((workflowRuns) => {
+				workflowRuns = _.orderBy(workflowRuns, ['created_at'], ['desc']);
+				return workflowRuns[0].conclusion;
+			})
+			.then((workflowStatus) => {
+				if(workflowStatus === 'success') {
+					logger.info(`Workflow completed successfully for repo: ${repo.name}`);
+				} else {
+					logger.warn(`Workflow did not completed successfully for repo: ${repo.name}`);
+				}
+			})
+			.catch((err) => {
+				logger.error(`Unable to get status of workflow for repo: ${repo.name}, error: ${err.message}`);
+			});
+	};
 }
 module.exports = WorkflowCreator;

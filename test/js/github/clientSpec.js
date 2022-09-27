@@ -13,6 +13,7 @@ const WorkflowRun = require('../../../src/github/model/workflowRun.js');
 const repoDetails = require('../../resources/github/repoDetails.json');
 const repoList = require('../../resources/github/repoList.json');
 const repoWorkflowRunList = require('../../resources/github/workflowRunList.json');
+const repoNoWorkflowRunList = require('../../resources/github/noWorkflowRunList.json');
 
 describe('Github client', function() {
 	const GITHUB_API_URL = config.get('j2ga.github.url');
@@ -25,7 +26,7 @@ describe('Github client', function() {
 			'https://' + GITHUB_API_URL, {
 				reqHeaders: {
 					'Content-Type': 'application/json',
-					'User-Agent': 'gl2h',
+					'User-Agent': 'j2ga',
 					'Authorization': 'token ' + GITHUB_PRIVATE_TOKEN
 				}
 			}
@@ -98,7 +99,7 @@ describe('Github client', function() {
 		it('should get the list of workflowRuns for a specific repo under specified org', async () => {
 			//given
 			const orgName = 'some-org';
-			const repoName = 'soe-repo';
+			const repoName = 'some-repo';
 			api.get(`/repos/${orgName}/${repoName}/actions/runs`).reply(200, repoWorkflowRunList);
 			//when
 			const workflowRunList = await githubClient.listRepoWorkflowRuns(orgName, repoName);
@@ -117,6 +118,18 @@ describe('Github client', function() {
 			workflowRunList[1].path.should.equal('.github/workflows/build.yml');
 			workflowRunList[1].status.should.equal('completed');
 			workflowRunList[1].conclusion.should.equal('failure');
+		});
+		it('should reject promise when github returns no workflows for a repo who has no workflow run yet', async () => {
+			//given
+			const orgName = 'some-org';
+			const repoName = 'some-repo';
+			api.get(`/repos/${orgName}/${repoName}/actions/runs`).reply(200, repoNoWorkflowRunList);
+			//when
+			assert.isRejected(
+				githubClient.listRepoWorkflowRuns(orgName, repoName),
+				Error,
+				`Unable to get list of workflow runs for repo: ${repoName}, org: ${orgName}`
+			);
 		});
 		it('should throw error when github returns 404 on list workflow runs for a repo', async () => {
 			//given
