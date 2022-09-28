@@ -112,7 +112,7 @@ function WorkflowCreator() {
 				if(workflowStatus === 'success') {
 					logger.info(`Workflow completed successfully for repo: ${repo.name}`);
 				} else {
-					logger.warn(`Workflow did not completed successfully for repo: ${repo.name}`);
+					logger.warn(`Workflow did not complete successfully for repo: ${repo.name}`);
 				}
 			})
 			.catch((err) => {
