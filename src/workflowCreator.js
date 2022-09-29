@@ -1,5 +1,4 @@
 const path = require('path');
-const fs = require('fs');
 const config = require('config');
 const replace = require('replace-in-file');
 
@@ -92,11 +91,7 @@ function WorkflowCreator() {
 		const commitWorkflowMessage = 'Add github workflow while migrating from Jenkins';
 		const remoteName = 'origin';
 		return gitClient.clone(repo.clone_url, pathToCloneRepo, remoteName)
-			.then(() => {
-				if( !fs.existsSync(pathToWorkflowDir) ) {
-					fsClient.mkdir(pathToWorkflowDir);
-				}
-			})
+			.then(() => fsClient.mkdir(pathToWorkflowDir))
 			.then(() => workflowTypeIdentifier.getWorkflowType(pathToJenkinsFile, repo.name))
 			.then((workflowType) => fsClient.copyFile(_getPathToTemplateWorkflowFile(workflowType), pathToRepoWorkflow))
 			.then(() => _replaceRepoSpecificParameters(repo, pathToRepoWorkflow))
