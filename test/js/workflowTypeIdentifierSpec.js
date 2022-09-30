@@ -22,7 +22,7 @@ describe('WorkflowTypeIdentifier', function() {
 			//when
 			const workflowType = await workflowTypeIdentifier.getWorkflowType(pathToJenkinsFile, repoName);
 			//then
-			assert.strictEqual(workflowType, 'java-gradle-workflow');
+			assert.strictEqual(workflowType, 'java-gradle-workflow.yml');
 		});
 		it('throw error when there is no known shared pipeline mentioned in Jenkinsfile', function() {
 			//given

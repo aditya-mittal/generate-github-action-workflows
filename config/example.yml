@@ -5,5 +5,6 @@ j2ga:
     email: your_email@gmail.com
     token: your_github_token
   jenkins2githubWorkflowsMap:
-    JenkinsGradleSharedLibrary: java-gradle-workflow
-    JenkinsMavenSharedLibrary: java-maven-workflow
+    JenkinsGradleSharedLibrary: java-gradle-workflow.yml
+    YOUR_JENKINS_SHARED_LIBRARY_TEMPLATE_NAME1: GITHUB_ACTION_REUSABLE_CALLER_WORKFLOW_FILE_NAME1
+    YOUR_JENKINS_SHARED_LIBRARY_TEMPLATE_NAME2: GITHUB_ACTION_REUSABLE_CALLER_WORKFLOW_FILE_NAME2

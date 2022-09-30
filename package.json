@@ -15,7 +15,7 @@
     "test-watch": "mocha --recursive --require test/js/util/mochaHelper.js -w",
     "test-jenkins": "JUNIT_REPORT_PATH=./test_report.xml mocha --recursive --require test/js/util/mochaHelper.js --colors --reporter mocha-jenkins-reporter",
     "build": "npm install && npm link",
-    "clean": "npm unlink && npm uninstall"
+    "clean": "npm unlink j2ga && npm uninstall j2ga"
   },
   "pre-commit": [
     "lint",
@@ -30,7 +30,7 @@
   "devDependencies": {
     "chai": "^4.2.0",
     "chai-as-promised": "^7.1.1",
-    "codecov": "^3.7.2",
+    "codecov": "^3.8.3",
     "eslint": "^7.4.0",
     "mocha": "^7.1.2",
     "mocha-jenkins-reporter": "^0.4.3",

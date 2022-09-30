@@ -5,5 +5,5 @@ j2ga:
     email: abc@gmail.com
     token: your_github_token
   jenkins2githubWorkflowsMap:
-    JenkinsGradleSharedLibrary: java-gradle-workflow
-    JenkinsMavenSharedLibrary: java-maven-workflow
+    JenkinsGradleSharedLibrary: java-gradle-workflow.yml
+    JenkinsMavenSharedLibrary: java-maven-workflow.yml
