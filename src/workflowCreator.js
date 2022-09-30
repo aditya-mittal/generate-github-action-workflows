@@ -62,15 +62,15 @@ function WorkflowCreator() {
 	};
 
 	var _getPathToWorkflowDir = function(pathToCloneRepo) {
-		return path.join(pathToCloneRepo, '.github', 'workflows');
+		return path.join(pathToCloneRepo, '.github', 'workflows').split(path.sep).join(path.posix.sep);
 	};
 
 	var _getPathToTemplateWorkflowFile = function(workflowType) {
-		return path.join(process.cwd(), 'src', 'resources', `${workflowType}.yml`);
+		return path.join(process.cwd(), 'src', 'resources', `${workflowType}.yml`).split(path.sep).join(path.posix.sep);
 	};
 
 	var _getPathToRepoWorkflow = function(pathToWorkflowDir) {
-		return path.join(pathToWorkflowDir, 'callerWorkflow.yml');
+		return path.join(pathToWorkflowDir, 'callerWorkflow.yml').split(path.sep).join(path.posix.sep);
 	};
 
 	var _replaceRepoSpecificParameters = function(repo, pathToRepoWorkflow) {
@@ -83,11 +83,11 @@ function WorkflowCreator() {
 	};
 
 	var _createWorkflow = async function(repo) {
-		const pathToCloneRepo = path.join(process.cwd(), '/tmp', repo.name);
-		const pathToJenkinsFile = path.join(process.cwd(), '/tmp', repo.name, 'Jenkinsfile');
+		const pathToCloneRepo = path.join(process.cwd(), '/tmp', repo.name).split(path.sep).join(path.posix.sep);
+		const pathToJenkinsFile = path.join(process.cwd(), '/tmp', repo.name, 'Jenkinsfile').split(path.sep).join(path.posix.sep);
 		const pathToWorkflowDir = _getPathToWorkflowDir(pathToCloneRepo);
 		const pathToRepoWorkflow = _getPathToRepoWorkflow(pathToWorkflowDir);
-		const repoRelativePathToWorkflow = path.join('.github','workflows', 'callerWorkflow.yml');
+		const repoRelativePathToWorkflow = path.join('.github','workflows', 'callerWorkflow.yml').split(path.sep).join(path.posix.sep);
 		const commitWorkflowMessage = 'Add github workflow while migrating from Jenkins';
 		const remoteName = 'origin';
 		return gitClient.clone(repo.clone_url, pathToCloneRepo, remoteName)
