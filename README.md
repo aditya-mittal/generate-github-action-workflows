@@ -43,13 +43,13 @@ $ export NODE_CONFIG_DIR="path-to-directory-containing-config"
 $ export NODE_CONFIG_ENV="your_config_file_name"
 ```
 
-The `jenkins2githubWorkflowsMap` in config.yml is a mapping of Jenkins shared library template and Github Action 
+The `jenkins2githubWorkflowsMap` in config is a mapping of Jenkins shared library template and Github Action 
 reusable caller workflow file names.
 
 jenkins2githubWorkflowsMap<key, value>
 
-key - The Jenkinsfile template name mentioned in your caller Jenkinsfile
-value - The file name for Github Action reusable caller workflow.
+- key - The Jenkinsfile template name mentioned in your caller Jenkinsfile
+- value - The file name for Github Action reusable caller workflow.
 
 e.g.
 - key - [JenkinsGradleSharedLibrary](./test/resources/sharedLibJenkinsfile#L3)
