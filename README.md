@@ -86,7 +86,8 @@ $ npm run clean
 - Does not parses Jenkinsfile entirely and maps that to Github Actions reusable workflow,
 rather just interprets kind of Jenkins shared library used and generates its equivalent Github Action Workflow.
 - If you have a plain/vanilla Jenkinsfile with no shared pipeline, the generation of its equivalent Github workflow for 
-that is currently not possible.  
+that is currently not possible.
+- If your default branch on Github is protected, the push will be rejected
 
 ### Creating a private token for GitHub
 - Navigate to your [GitHub Personal access tokens](https://github.com/settings/tokens)
