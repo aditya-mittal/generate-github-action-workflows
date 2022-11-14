@@ -19,12 +19,12 @@ const repoList = require('../resources/github/repoList.json');
 const repoWorkflowRunList = require('../resources/github/workflowRunList.json');
 
 describe('Workflow creator', function() {
-	describe('createWorkflows', function() {
-		const workflowCreator = new WorkflowCreator();
-		const GITHUB_API_URL = config.get('j2ga.github.url');
-		const GITHUB_PRIVATE_TOKEN = config.get('j2ga.github.token');
+	const workflowCreator = new WorkflowCreator();
+	const GITHUB_API_URL = config.get('j2ga.github.url');
+	const GITHUB_PRIVATE_TOKEN = config.get('j2ga.github.token');
 
-		let githubApi;
+	let githubApi;
+	describe('createWorkflows', function() {
 		let gitCloneStub;
 		let gitAddStub;
 		let gitCommitStub;
@@ -55,13 +55,14 @@ describe('Workflow creator', function() {
 			);
 		});
 		afterEach(() => {
+			sinon.restore();
 			nock.cleanAll();
 		});
-
 		it('should generate workflows for all repos under the specified github org', async () => {
 			//given
 			this.timeout(0);
 			const githubOrgName = 'test-migration-org-1-gh';
+			const repoNameFilter = '';
 			githubApi.get(`/orgs/${githubOrgName}/repos`).reply(200, repoList);
 			gitCloneStub.returns(Promise.resolve());
 			fsMkDirStub.returns(Promise.resolve());
@@ -73,7 +74,7 @@ describe('Workflow creator', function() {
 			gitCommitStub.returns(Promise.resolve());
 			gitPushStub.returns(Promise.resolve());
 			//when
-			const result = await workflowCreator.createWorkflows(githubOrgName);
+			const result = await workflowCreator.createWorkflows(githubOrgName, repoNameFilter);
 			//then
 			expect(result).to.equal(0);
 			sinon.assert.callCount(gitCloneStub, 2);
@@ -86,14 +87,37 @@ describe('Workflow creator', function() {
 			sinon.assert.callCount(gitPushStub, 2);
 			sinon.assert.callCount(fsRmStub, 2);
 		});
+		it('should generate workflows for only filtered repos based on the name under the specified github org', async () => {
+			//given
+			this.timeout(0);
+			const githubOrgName = 'test-migration-org-1-gh';
+			const repoNameFilter = 'Hello-';
+			githubApi.get(`/orgs/${githubOrgName}/repos`).reply(200, repoList);
+			gitCloneStub.returns(Promise.resolve());
+			fsMkDirStub.returns(Promise.resolve());
+			fsRmStub.returns(Promise.resolve());
+			fsExistsStub.returns(true);
+			fsReadFileStub.returns(Promise.resolve('JenkinsGradleSharedLibrary'));
+			fsCopyFileStub.returns(Promise.resolve());
+			gitAddStub.returns(Promise.resolve());
+			gitCommitStub.returns(Promise.resolve());
+			gitPushStub.returns(Promise.resolve());
+			//when
+			const result = await workflowCreator.createWorkflows(githubOrgName, repoNameFilter);
+			//then
+			expect(result).to.equal(0);
+			sinon.assert.callCount(gitCloneStub, 1);
+			sinon.assert.callCount(fsMkDirStub, 1);
+			sinon.assert.callCount(fsExistsStub, 1);
+			sinon.assert.callCount(fsReadFileStub, 1);
+			sinon.assert.callCount(fsCopyFileStub, 1);
+			sinon.assert.callCount(gitAddStub, 1);
+			sinon.assert.callCount(gitCommitStub, 1);
+			sinon.assert.callCount(gitPushStub, 1);
+			sinon.assert.callCount(fsRmStub, 1);
+		});
 	});
 	describe('getWorkflowStatus', function() {
-		const workflowCreator = new WorkflowCreator();
-		const GITHUB_API_URL = config.get('j2ga.github.url');
-		const GITHUB_PRIVATE_TOKEN = config.get('j2ga.github.token');
-
-		let githubApi;
-
 		beforeEach(() => {
 			githubApi = nock(
 				'https://' + GITHUB_API_URL, {

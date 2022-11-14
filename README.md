@@ -67,6 +67,12 @@ $ j2ga -h
 $ j2ga create-workflows my-github-org
 ```
 
+### Generate github action workflows for repo names matching given filter under specified org
+
+```bash
+$ j2ga create-workflows --repo-starts-with my-repo-filter my-github-org
+```
+
 ### Get github action workflows status for all repos under specified org
 
 ```bash

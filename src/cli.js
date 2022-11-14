@@ -12,8 +12,9 @@ const program = new Command();
 program
 	.command('create-workflows <github-org-name>')
 	.description('Generate workflows for all repos under the specified Github org')
-	.action(async (githubOrgName) => {
-		await generateWorkflows(githubOrgName);
+	.option('--repo-starts-with <prefix>', 'Repositories starting with specified prefix', '')
+	.action(async (githubOrgName, cmdObj) => {
+		await generateWorkflows(githubOrgName, cmdObj.repoStartsWith);
 	});
 
 program
@@ -25,9 +26,9 @@ program
 
 program.parse(process.argv);
 
-async function generateWorkflows(githubOrgName) {
+async function generateWorkflows(githubOrgName, repoNameFilter) {
 	try {
-		await workflowCreator.createWorkflows(githubOrgName);
+		await workflowCreator.createWorkflows(githubOrgName, repoNameFilter);
 	} catch(error) {
 		logger.error(error.message);
 	}

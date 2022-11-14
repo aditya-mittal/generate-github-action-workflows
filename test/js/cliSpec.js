@@ -28,6 +28,16 @@ describe('Tests for cli', () => {
 			//then
 			sinon.assert.calledWith(workflowCreatorStub, githubOrgName);
 		});
+		it('should call createWorkflows for only those repos matching filter under specified org', async function () {
+			//given
+			const githubOrgName = 'FOO';
+			const repoNameFilter = 'someFilter';
+			//when
+			process.argv = `node ../../src/cli.js create-workflows --repo-starts-with ${repoNameFilter} ${githubOrgName}`.split(' ');
+			await proxyquire('../../src/cli.js', { './workflowCreator': createWorkflowsStub });
+			//then
+			sinon.assert.calledWith(workflowCreatorStub, githubOrgName, repoNameFilter);
+		});
 	});
 	describe('Get workflow status for all repos under specified org', function () {
 		let getWorkflowsStatusStub;

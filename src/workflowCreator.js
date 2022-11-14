@@ -15,7 +15,7 @@ function WorkflowCreator() {
 	const githubClient = new GithubClient(config.get('j2ga.github.url'), config.get('j2ga.github.username'), config.get('j2ga.github.token'));
 	const workflowTypeIdentifier = new WorkflowTypeIdentifier(config.get('j2ga.jenkins2githubWorkflowsMap'));
 
-	this.createWorkflows = async function(githubOrgName) {
+	this.createWorkflows = async function(githubOrgName, repoNameFilter) {
 		try {
 			logger.info(`Migrating repos under org: ${githubOrgName} from Jenkins to Github Actions`);
 			let repoList = await githubClient.listOrgRepos(githubOrgName)
@@ -23,6 +23,7 @@ function WorkflowCreator() {
 				.catch((err) => {
 					logger.error(`Unable to get list of repo for org: ${githubOrgName}, error: ${err.message}`);
 				});
+			repoList = _filterReposWithPrefix(repoList, repoNameFilter);
 			logger.info(`Migrating total ${repoList.length} repos under org: ${githubOrgName}`);
 			await _createWorkflows(this, repoList);
 			return 0;
@@ -118,6 +119,10 @@ function WorkflowCreator() {
 			.catch((err) => {
 				logger.error(`Unable to get status of workflow for repo: ${repo.name}, error: ${err.message}`);
 			});
+	};
+
+	var _filterReposWithPrefix = function(repos, prefix) {
+		return repos.filter(repo => repo.startsWith(prefix));
 	};
 }
 module.exports = WorkflowCreator;
