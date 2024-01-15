@@ -49,7 +49,7 @@ reusable caller workflow file names.
 jenkins2githubWorkflowsMap<key, value>
 
 - key - The Jenkinsfile template name mentioned in your caller Jenkinsfile
-- value - The file name for Github Action reusable caller workflow.
+- value - The file name for Github Action reusable caller workflow
 
 e.g.
 - key - [JenkinsGradleSharedLibrary](./test/resources/sharedLibJenkinsfile#L3)
