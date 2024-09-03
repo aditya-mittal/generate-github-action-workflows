@@ -1,0 +1,19 @@
+name: Test workflow
+
+on:
+  push:
+    branches:
+      - '**'
+  workflow_dispatch:
+
+jobs:
+  build:
+    name: test-workflow
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Set up Docker credentials
+        run: |
+          echo ${GIROGATE_STAGING_NAME}
+        env:
+          GIROGATE_STAGING_NAME: ${{ github.actor }}
